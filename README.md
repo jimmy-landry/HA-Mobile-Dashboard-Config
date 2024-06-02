@@ -16,8 +16,8 @@ _All these can be installed via HACS._
 - [Timer Bar Card](https://github.com/rianadon/timer-bar-card)
 - [Custom Brand Icons](https://github.com/elax46/custom-brand-icons) (optional but recommended, gives you more icon choices)
 
-# Cards & Elements
-The following code samples will help you get these cards working on your Home Assistant dashboard.
+## There's a few things you need to do before you paste in the YAML file so LISTEN UP:
+**Step 1:** Copy the weather_icons folder into your config/www folder. This is **required** for the weather card on the main page.
 
-## Title & Pending Updates Counter
-
+<img width="431" alt="Screenshot 2024-06-02 at 8 53 41 AM" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/ea1b0489-436e-4385-adad-a085e4cad05d">
+This thing
