@@ -16,6 +16,12 @@ _All these can be installed via HACS._
 - [Timer Bar Card](https://github.com/rianadon/timer-bar-card)
 - [Custom Brand Icons](https://github.com/elax46/custom-brand-icons) (optional but recommended, gives you more icon choices)
 
+---
+
+**Credit where credit is due:** Of course, I need to give credit to LE0N and his amazing work with his [Rounded dashboard and theme](https://community.home-assistant.io/t/rounded-dashboard-guide/543043). The layout of this dashboard is very heavily based off his, and the theme is pretty much identical. I used a lot of his custom button cards as well as created a few of my own. 
+
+---
+
 ## There's a few things you need to do before you paste in the YAML file so LISTEN UP:
 **Step 1:** Copy the weather_icons folder into your config/www folder. This is **required** for the weather card on the main page.
 
@@ -41,6 +47,7 @@ frontend:
 
 <img width="740" alt="Screenshot 2024-06-04 at 9 25 38 PM" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/15280cd9-923b-4a76-8a10-5be9f19c60f9">
 
+
 > oh and don't mind me having like 50 themes on my instance
 
 If you don't see it, repeat step 2 and make sure you named the folders and files correctly.
@@ -51,3 +58,18 @@ If you don't see it, repeat step 2 and make sure you named the folders and files
 - In Home Assistant, go to Settings > Dashboards and create a new dashboard from scratch.
 
 <img width="451" alt="Screenshot 2024-06-04 at 9 39 23 PM" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/743ba45d-0e25-41bb-b7ce-26e4f86e785c">
+
+- Open the dashboard followed by the Raw config editor as shown below:
+  
+![raw config editor 001](https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/65f5621e-0d04-4fef-8d2e-855023db4fdb)
+
+- Delete any existing lines and then paste in the YAML file that you copied earlier. There should be ~5100 lines.
+- Save the file and exit the raw config editor.
+
+## DON'T OPEN AN ISSUE UNTIL YOU READ THIS!!!
+**MY HOME ASSISTANT ENTITIES ARE NOT THE SAME AS YOUR HOME ASSISTANT ENTITIES.** This means that you'll be seeing a bunch of errors with stuff like "Entity not found" and "ButtonCardJSTError" on pretty much every card. But don't panic. Edit each of the cards and replace each of my entities with your entities, or delete the card entirely if you don't want it. Even better, feel free to modify any of the cards to your liking. I made all the YAML available to you for a reason.
+
+If you've tried basic troubleshooting and are still seeing errors and don't know what they mean, _then_ feel free to drop a comment on YT or open an issue. I'll be more than happy to help you out.
+
+## Before you ask...
+**Why did I not remove all my entities and put null values for each of them?**
