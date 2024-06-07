@@ -1,5 +1,8 @@
 # Home Assistant Mobile Dashboard
 A mobile Home Assistant dashboard inspired by LE0N's Rounded theme
+> I'm not creative enough to give this a name. Yes, I know I could just name it "Rounded dashboard based off LE0N's dashboard," but that sounds too basic. Personally, I think Home Assistant Mobile Dashboard has a nice ring to it, don't you?
+
+**Beginners Warning:** This repo is pretty much a dump of my config and will require some work to get working on your end. As a result, I'm assuming you have some basic YAML knowledge and will be able to troubleshoot basic issues and errors, as your dashboard will likely be freaking out with all kinds of errors after pasting in my code. Sorry in advance 😜
 
 ---
 
@@ -18,7 +21,7 @@ _All these can be installed via HACS._
 
 ---
 
-**Credit where credit is due:** Of course, I need to give credit to LE0N and his amazing work with his [Rounded dashboard and theme](https://community.home-assistant.io/t/rounded-dashboard-guide/543043). The layout of this dashboard is very heavily based off his, and the theme is pretty much identical. I used a lot of his custom button cards as well as created a few of my own. 
+**Credit where credit is due (once again):** Of course, I need to give credit to LE0N and his amazing work with his [Rounded dashboard and theme](https://community.home-assistant.io/t/rounded-dashboard-guide/543043). I went through 4 different mobile dashboards within about 7 months before I settled on his, and I think I'll be sticking with it for quite a while. The layout of this dashboard is very heavily based off his, and the theme is pretty much identical. I used a lot of his custom button cards as well as created a few of my own. 
 
 ---
 
@@ -66,10 +69,10 @@ If you don't see it, repeat step 2 and make sure you named the folders and files
 - Delete any existing lines and then paste in the YAML file that you copied earlier. There should be ~5100 lines.
 - Save the file and exit the raw config editor.
 
+From here, you should be able to begin clicking through each of the cards and replacing my entities with yours.
+
 ## DON'T OPEN AN ISSUE UNTIL YOU READ THIS!!!
 **MY HOME ASSISTANT ENTITIES ARE NOT THE SAME AS YOUR HOME ASSISTANT ENTITIES.** This means that you'll be seeing a bunch of errors with stuff like "Entity not found" and "ButtonCardJSTError" on pretty much every card. But don't panic. Edit each of the cards and replace each of my entities with your entities, or delete the card entirely if you don't want it. Even better, feel free to modify any of the cards to your liking. I made all the YAML available to you for a reason.
 
-If you've tried basic troubleshooting and are still seeing errors and don't know what they mean, _then_ feel free to drop a comment on YT or open an issue. I'll be more than happy to help you out.
+If you've tried basic troubleshooting and are still seeing errors and don't know what they mean, _then_ feel free to drop a comment on YouTube or open an issue. I'll be more than happy to help you out.
 
-## Before you ask...
-**Why did I not remove all my entities and put null values for each of them?**
