@@ -1,8 +1,15 @@
 # Home Assistant Mobile Dashboard
 A mobile Home Assistant dashboard inspired by LE0N's Rounded theme
-> I'm not creative enough to give this a name. Yes, I know I could just name it "Rounded dashboard based off LE0N's dashboard," but that sounds too basic. Personally, I think Home Assistant Mobile Dashboard has a nice ring to it, don't you?
 
-**Beginners Warning:** This repo is pretty much a dump of my config and will require some work to get working on your end. As a result, I'm assuming you have some basic YAML knowledge and will be able to troubleshoot basic issues and errors, as your dashboard will likely be freaking out with all kinds of errors after pasting in my code. Sorry in advance 😜
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/187080a2-5615-4c68-b3f9-d3718bc00c34">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/da6df125-bd12-41f8-af0c-0246c3891d67">
+  <img alt="Shows a black logo in light color mode and a white one in dark color mode." src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/187080a2-5615-4c68-b3f9-d3718bc00c34">
+</picture>
+
+> No, I'm not creative enough to give this a name. Yes, I know I could just name it "Rounded dashboard based off LE0N's dashboard," but that's a bit of a mouthful. Personally, I think Home Assistant Mobile Dashboard has a nice ring to it, don't you?
+
+**Beginners Warning:** This repo is pretty much a dump of my config and will require some work to get working on your end. As a result, I'm assuming you have some basic YAML knowledge and will be able to troubleshoot basic issues and errors, because your dashboard will likely be freaking out with all kinds of errors after pasting in my code. Sorry in advance 😜
 
 ---
 
@@ -28,13 +35,22 @@ _All these can be installed via HACS._
 ## There's a few things you need to do before you paste in the YAML file so LISTEN UP:
 **Step 1:** Copy the weather_icons folder into your config/www folder. This is **required** for the weather card on the main page.
 
-<img width="431" alt="Screenshot 2024-06-02 at 8 53 41 AM" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/ea1b0489-436e-4385-adad-a085e4cad05d">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/9c0d50d9-9546-4862-bd0f-b7385bed2145">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/fa14e902-7571-4428-bdf3-3349487c99ca">
+  <img width="438" img alt="Navigate to the rounded.yaml file and choose Copy raw file." src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/8f8c3d71-f568-4f5b-8870-4abdb8dc36ac">
+</picture>
 
 This thing right up here ⬆
 
 **Step 2:** Import the Rounded theme file:
 - 2.1: Navigate to the _rounded.yaml_ theme file and choose _Copy raw file_.
-<img width="288" alt="Screenshot 2024-06-04 at 9 17 19 PM" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/5c325602-dffa-4663-a88a-87a57558fe9e">
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/2f6fe260-14da-4bce-b042-b997b17d9a6a">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/8f8c3d71-f568-4f5b-8870-4abdb8dc36ac">
+  <img width="288" img alt="Navigate to the rounded.yaml file and choose Copy raw file." src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/8f8c3d71-f568-4f5b-8870-4abdb8dc36ac">
+</picture>
 
 - 2.2: Access your Home Assistant configuration.yaml file and add the following lines if you don't already have them:
 
@@ -48,7 +64,11 @@ frontend:
 
 **Step 3:** Ensure you can access and use the new Rounded theme via your profile.
 
-<img width="740" alt="Screenshot 2024-06-04 at 9 25 38 PM" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/15280cd9-923b-4a76-8a10-5be9f19c60f9">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/6e29ce64-9ee9-4bd8-bb6b-e3c631eb663f">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/11f9c021-3b0c-4333-b343-ca1f1bc9135a">
+  <img alt="Ensure you can access and use the new Rounded theme via your profile." src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/d78857b8-904d-44c1-8064-94cf9bf96542">
+</picture>
 
 
 > oh and don't mind me having like 50 themes on my instance
@@ -60,11 +80,19 @@ If you don't see it, repeat step 2 and make sure you named the folders and files
 - Open the _mobile_dash_redacted_master.yaml_ file and choose Copy raw file.
 - In Home Assistant, go to Settings > Dashboards and create a new dashboard from scratch.
 
-<img width="451" alt="Screenshot 2024-06-04 at 9 39 23 PM" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/743ba45d-0e25-41bb-b7ce-26e4f86e785c">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/f68308ea-9d1e-46aa-98da-3c2fdbbafeb9">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/75bc7ce5-cfce-4c5c-93da-0f546d9af6eb">
+  <img width="432" img alt="Create a new dashboard from scratch" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/8f8c3d71-f568-4f5b-8870-4abdb8dc36ac">
+</picture>
 
-- Open the dashboard followed by the Raw config editor as shown below:
-  
-![raw config editor 001](https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/65f5621e-0d04-4fef-8d2e-855023db4fdb)
+- Open the dashboard and access the raw configuration editor:
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/104ff1e1-c04f-41e6-8ba2-41323ebc460e">
+  <source media="(prefers-color-scheme: light)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/a690855e-adb0-4402-8e9e-ed079a67c391">
+  <img width="418" img alt="Access the raw config editor" src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/8f8c3d71-f568-4f5b-8870-4abdb8dc36ac">
+</picture>
 
 - Delete any existing lines and then paste in the YAML file that you copied earlier. There should be ~5100 lines.
 - Save the file and exit the raw config editor.
@@ -75,4 +103,6 @@ From here, you should be able to begin clicking through each of the cards and re
 **MY HOME ASSISTANT ENTITIES ARE NOT THE SAME AS YOUR HOME ASSISTANT ENTITIES.** This means that you'll be seeing a bunch of errors with stuff like "Entity not found" and "ButtonCardJSTError" on pretty much every card. But don't panic. Edit each of the cards and replace each of my entities with your entities, or delete the card entirely if you don't want it. Even better, feel free to modify any of the cards to your liking. I made all the YAML available to you for a reason.
 
 If you've tried basic troubleshooting and are still seeing errors and don't know what they mean, _then_ feel free to drop a comment on YouTube or open an issue. I'll be more than happy to help you out.
+
+
 
