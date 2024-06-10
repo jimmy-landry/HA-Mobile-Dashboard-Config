@@ -102,7 +102,13 @@ From here, you should be able to begin clicking through each of the cards and re
 ## DON'T OPEN AN ISSUE UNTIL YOU READ THIS!!!
 **MY HOME ASSISTANT ENTITIES ARE NOT THE SAME AS YOUR HOME ASSISTANT ENTITIES.** This means that you'll be seeing a bunch of errors with stuff like "Entity not found" and "ButtonCardJSTError" on pretty much every card. But don't panic. Edit each of the cards and replace each of my entities with your entities, or delete the card entirely if you don't want it. Even better, feel free to modify any of the cards to your liking. I made all the YAML available to you for a reason.
 
+These errors say different things but all mean the same thing (the entity doesn't exist):
+- Entity not found
+- Entity not available
+- ButtonCardJSTError
+- Undefined is not an object
+- _The card just doesn't show up at all_
+
 If you've tried basic troubleshooting and are still seeing errors and don't know what they mean, _then_ feel free to drop a comment on YouTube or open an issue. I'll be more than happy to help you out.
 
-
-
+And don't forget to drop a star on this repo if you like this dashboard! 😀
