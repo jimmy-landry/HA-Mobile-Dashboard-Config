@@ -1,0 +1,4976 @@
+##  Card config starts at line 2837.
+##  Services specific to my instance / services that will be different on your instance have been removed to *hopefully* make it easier to get running.
+##  One final note and perhaps the most important: MAKE SURE YOU CHANGE THE ENTITIES INSIDE THE TEMPLATES (javascript/jinja, NOT button card) AS WELL!
+##  Enjoy 😄
+
+button_card_templates: 
+  list_4_items:
+    styles:
+      grid:
+        - grid-template-areas: '''item1 item2 item3 item4'''
+        - grid-template-columns: 1fr 1fr 1fr 1fr
+        - grid-template-rows: min-content
+        - column-gap: 7px
+      card:
+        - box-shadow: none
+        - padding: 0px
+  list_3_items:
+    styles:
+      grid:
+        - grid-template-areas: '''item1 item2 item3'''
+        - grid-template-columns: 1fr 1fr 1fr
+        - grid-template-rows: min-content
+        - column-gap: 7px
+      card:
+        - box-shadow: none
+        - padding: 0px
+  ulm_actions_name:
+    tap_action:
+      action: |
+        [[[
+          var action = variables.ulm_name_tap_action != null ? variables.ulm_name_tap_action : 'toggle';
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config) {
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_name_tap_action == 'navigate' ?
+        variables.ulm_name_tap_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_name_tap_haptic != null ?
+        variables.ulm_name_tap_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_name_tap_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_name_tap_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_name_tap_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_name_tap_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+    hold_action:
+      action: |
+        [[[
+          var action = variables.ulm_name_hold_action != null ? variables.ulm_name_hold_action : 'more-info';
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config) {
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_name_hold_action == 'navigate' ?
+        variables.ulm_name_hold_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_name_hold_haptic != null ?
+        variables.ulm_name_hold_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_name_hold_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_name_hold_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_name_hold_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_card_name_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+    double_tap_action:
+      action: |
+        [[[
+          var action = variables.ulm_name_double_tap_action != null ? variables.ulm_name_double_tap_action : 'adaptive';
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config){
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_name_double_tap_action == 'navigate' ?
+        variables.ulm_name_double_tap_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_name_double_tap_haptic != null ?
+        variables.ulm_name_double_tap_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_name_double_tap_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_name_double_tap_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_name_double_tap_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_name_double_tap_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+  icon_info:
+    color: '#BBBBBB'
+    show_icon: true
+    show_label: true
+    show_name: true
+    state:
+      - styles:
+          custom_fields:
+            notification:
+              - border-radius: 50%
+              - position: absolute
+              - left: 24px
+              - top: '-2px'
+              - height: 16px
+              - width: 16px
+              - border: 2px solid var(--card-background-color)
+              - font-size: 12px
+              - line-height: 14px
+              - background-color: |
+                  [[[
+                    return "rgba(var(--color-red),1)";
+                  ]]]
+        value: unavailable
+    styles:
+      icon:
+        - color: rgba(var(--color-theme),0.2)
+      label:
+        - justify-self: start
+        - align-self: start
+        - font-weight: bolder
+        - font-size: 12px
+        - filter: opacity(40%)
+        - margin-left: 12px
+      name:
+        - align-self: end
+        - justify-self: start
+        - font-weight: bold
+        - font-size: 14px
+        - margin-left: 12px
+      state:
+        - justify-self: start
+        - align-self: start
+        - font-weight: bolder
+        - font-size: 12px
+        - filter: opacity(40%)
+        - margin-left: 12px
+      img_cell:
+        - background-color: rgba(var(--color-theme),0.05)
+        - border-radius: 50%
+        - place-self: center
+        - width: 42px
+        - height: 42px
+      grid:
+        - grid-template-areas: '''i n'' ''i l'''
+        - grid-template-columns: min-content auto
+        - grid-template-rows: min-content min-content
+      card:
+        - border-radius: 21px 8px 8px 21px
+        - box-shadow: none
+        - padding: 0px
+    custom_fields:
+      notification: |
+        [[[
+          if (entity.state =="unavailable"){
+            return `<ha-icon icon="mdi:exclamation" style="width: 12px; height: 12px; color: "#EFEFEF";"></ha-icon>`
+          }
+        ]]]
+    size: 20px
+  ulm_actions_icon:
+    tap_action:
+      action: |
+        [[[
+          var action = variables.ulm_icon_tap_action != null ? variables.ulm_icon_tap_action : 'toggle';
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config) {
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_icon_tap_action == 'navigate' ?
+        variables.ulm_icon_tap_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_icon_tap_haptic != null ?
+        variables.ulm_icon_tap_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_icon_tap_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_icon_tap_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_icon_tap_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_icon_tap_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+    hold_action:
+      action: |
+        [[[
+          var action = variables.ulm_icon_hold_action != null ? variables.ulm_icon_hold_action : 'more_info';
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config) {
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_icon_hold_action == 'navigate' ?
+        variables.ulm_icon_hold_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_icon_hold_haptic != null ?
+        variables.ulm_icon_hold_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_icon_hold_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_icon_hold_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_icon_hold_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_icon_hold_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+    double_tap_action:
+      action: |
+        [[[
+          var action = variables.ulm_icon_double_tap_action != null ? variables.ulm_icon_double_tap_action : 'adaptive';
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_card_light_enable_popup || variables.ulm_card_media_player_enable_popup || variables.ulm_card_thermostat_enable_popup || variables.ulm_card_cover_enable_popup)){
+            action = 'fire-dom-event'
+          }
+
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config) {
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_icon_double_tap_action == 'navigate' ?
+        variables.ulm_icon_double_tap_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_icon_double_tap_haptic != null ?
+        variables.ulm_icon_double_tap_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_icon_double_tap_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_icon_double_tap_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_icon_double_tap_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };
+          }
+          if(entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_icon_double_tap_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+  icon:
+    color: '#BBBBBB'
+    show_icon: true
+    show_label: false
+    show_name: false
+    state:
+      - styles:
+          custom_fields:
+            notification:
+              - border-radius: 50%
+              - position: absolute
+              - left: 24px
+              - top: '-2px'
+              - height: 16px
+              - width: 16px
+              - border: 2px solid var(--card-background-color)
+              - font-size: 12px
+              - line-height: 14px
+              - background-color: |
+                  [[[
+                    return "rgba(var(--color-red),1)";
+                  ]]]
+        value: unavailable
+    styles:
+      icon:
+        - color: rgba(var(--color-theme),0.2)
+      img_cell:
+        - background-color: rgba(var(--color-theme),0.05)
+        - border-radius: 50%
+        - place-self: center
+        - width: 42px
+        - height: 42px
+      grid:
+        - grid-template-areas: '''i'''
+        - grid-template-columns: min-content
+        - grid-template-rows: min-content
+      card:
+        - border-radius: 21px
+        - box-shadow: none
+        - padding: 0px
+    custom_fields:
+      notification: |
+        [[[
+          if (entity.state =="unavailable"){
+            return `<ha-icon icon="mdi:exclamation" style="width: 12px; height: 12px; color: "#EFEFEF";"></ha-icon>`
+          }
+        ]]]
+    size: 20px
+  list_2_items:
+    styles:
+      grid:
+        - grid-template-areas: '''item1 item2'''
+        - grid-template-columns: 1fr 1fr
+        - grid-template-rows: min-content
+        - column-gap: 7px
+      card:
+        - box-shadow: none
+        - padding: 0px
+  ulm_actions_card:
+    tap_action:
+      action: |
+        [[[
+          var action = variables.ulm_card_tap_action != null ? variables.ulm_card_tap_action : 'toggle';
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config) {
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_card_tap_action == 'navigate' ?
+        variables.ulm_card_tap_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_card_tap_haptic != null ?
+        variables.ulm_card_tap_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_card_tap_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if((entity != null) && entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_card_tap_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_card_tap_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };
+          }
+          if((entity != null) && entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_card_tap_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+    hold_action:
+      action: |
+        [[[
+          var action = variables.ulm_card_hold_action != null ? variables.ulm_card_hold_action : 'more-info';
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config) {
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_card_hold_action == 'navigate' ?
+        variables.ulm_card_hold_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_card_hold_haptic != null ?
+        variables.ulm_card_hold_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_card_hold_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if((entity != null) && entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_card_hold_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_card_hold_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };
+          }
+          if((entity != null) && entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_card_hold_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+    double_tap_action:
+      action: |
+        [[[
+          var action = variables.ulm_card_double_tap_action != null ? variables.ulm_card_double_tap_action : "adaptive";
+          let domain = (entity != null) ? entity.entity_id.substr(0, entity.entity_id.indexOf(".")) : "";
+
+          if (domain == "binary_sensor" || domain == "sensor" || domain == ""){
+            if (action == 'toggle')
+              action = 'none';
+          }
+
+          if (action == 'adaptive' && !(variables.ulm_input_select_option) ){
+            action = 'popup'
+          }
+          if (action == 'adaptive'){
+            action = 'call-service'
+          }
+          if (domain == "media_player" && action == 'toggle'){
+            action = 'call-service';
+          }
+          if (action == 'popup' && (variables.ulm_custom_popup != null )){
+            let popup_config = variables.ulm_custom_popup;
+            if ((typeof popup_config === 'object') && 'template' in popup_config) {
+              action = 'fire-dom-event';
+            }
+          }
+
+          if (action == 'popup'){
+            action = 'more-info'
+          }
+
+          return action;
+        ]]]
+      navigation_path: >-
+        [[[ return variables.ulm_card_double_tap_action == 'navigate' ?
+        variables.ulm_card_double_tap_navigate_path : '/0' ]]]
+      haptic: >-
+        [[[ return variables.ulm_card_double_tap_haptic != null ?
+        variables.ulm_card_double_tap_haptic : 'none' ]]]
+      service: |
+        [[[
+          var action = variables.ulm_card_double_tap_action;
+
+          if (action == 'adaptive'){
+            return 'input_select.select_option';
+          }
+          if((entity != null) && entity.entity_id.startsWith("media_player.")){
+            return 'media_player.media_play_pause';
+          }
+          return variables.ulm_card_double_tap_service;
+        ]]]
+      service_data: |
+        [[[
+          var action = variables.ulm_card_double_tap_action;
+
+          if (action == 'adaptive'){
+            return {
+              'option': variables.ulm_input_select_option,
+              'entity_id': variables.ulm_input_select
+            };leave
+          }
+          if((entity != null) && entity.entity_id.startsWith("media_player.")){
+            return {
+              'entity_id': entity.entity_id
+            };
+          }
+          return variables.ulm_card_double_tap_service_data;
+        ]]]
+      browser_mod:
+        service: browser_mod.popup
+        data:
+          hide_header: true
+          style: |
+            --popup-background-color: "#EFEFEF";
+            --popup-border-radius: 20px;
+            --popup-padding-x: 24px;
+            --popup-padding-y: 20px;
+            --popup-min-width: 1000px;
+          size: |
+            [[[
+              const mediaQuery = window.matchMedia('(max-width: 800px)')
+              if (mediaQuery.matches) {
+                return 'fullscreen'
+              }
+            ]]]
+          content:
+            type: custom:button-card
+            template: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'template' in popup_config) {
+                    return popup_config.template;
+                  }
+                }
+              ]]]
+            entity: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'entity' in popup_config) {
+                    return popup_config.entity;
+                  }
+                }
+
+                return (entity != null) ? entity.entity_id : null;
+              ]]]
+            variables: |
+              [[[
+                if (variables.ulm_custom_popup != null ){
+                  let popup_config = variables.ulm_custom_popup;
+                  if ((typeof popup_config === 'object') && 'popup_variables' in popup_config) {
+                    return popup_config.popup_variables;
+                  }
+                }
+                return {};
+              ]]]
+  ulm_custom_actions:
+    variables:
+      ulm_card_tap_action: toggle
+      ulm_card_hold_action: popup
+      ulm_card_double_tap_action: adaptive
+      ulm_icon_tap_action: toggle
+      ulm_icon_hold_action: popup
+      ulm_icon_double_tap_action: adaptive
+      ulm_name_tap_action: popup
+      ulm_name_hold_action: popup
+      ulm_name_double_tap_action: adaptive
+      ulm_card_tap_haptic: light
+      ulm_card_hold_haptic: light
+      ulm_card_double_tap_haptic: none
+      ulm_icon_tap_haptic: medium
+      ulm_icon_hold_haptic: none
+      ulm_icon_double_tap_haptic: none
+      ulm_name_tap_haptic: light
+      ulm_name_hold_haptic: none
+      ulm_name_double_tap_haptic: none
+  icon_more_info_new:
+    show_icon: false
+    show_name: false
+    show_label: false
+    template:
+      - ulm_custom_actions
+      - ulm_actions_card
+    styles:
+      grid:
+        - grid-template-areas: '''item1'''
+        - grid-template-columns: 1fr
+        - grid-template-rows: 1fr
+        - column-gap: 0px
+      card:
+        - border-radius: 20px
+        - box-shadow: var(--box-shadow)
+        - padding: 12px
+    custom_fields:
+      item1:
+        card:
+          type: custom:button-card
+          show_icon: false
+          show_name: false
+          show_label: false
+          template:
+            - list_2_items
+          styles:
+            grid:
+              - grid-template-columns: min-content auto
+              - column-gap: 0px
+            card:
+              - background-color: rgba(0,0,0,0)
+          custom_fields:
+            item1:
+              card:
+                type: custom:button-card
+                entity: '[[[ return entity.entity_id ]]]'
+                template:
+                  - icon
+                  - ulm_actions_icon
+                variables:
+                  ulm_input_select_option: '[[[ return variables.ulm_input_select_option; ]]]'
+                  ulm_input_select: '[[[ return variables.ulm_input_select; ]]]'
+                  ulm_icon_tap_action: '[[[ return variables.ulm_icon_tap_action; ]]]'
+                  ulm_icon_tap_haptic: '[[[ return variables.ulm_icon_tap_haptic; ]]]'
+                  ulm_icon_tap_navigate_path: '[[[ return variables.ulm_icon_tap_navigate_path; ]]]'
+                  ulm_icon_tap_service: '[[[ return variables.ulm_icon_tap_service; ]]]'
+                  ulm_icon_tap_service_data: '[[[ return variables.ulm_icon_tap_service_data]]]'
+                  ulm_icon_hold_action: '[[[ return variables.ulm_icon_hold_action; ]]]'
+                  ulm_icon_hold_haptic: '[[[ return variables.ulm_icon_hold_haptic; ]]]'
+                  ulm_icon_hold_navigate_path: '[[[ return variables.ulm_icon_hold_navigate_path; ]]]'
+                  ulm_icon_hold_service: '[[[ return variables.ulm_icon_hold_service; ]]]'
+                  ulm_icon_hold_service_data: '[[[ return variables.ulm_icon_hold_service_data]]]'
+                  ulm_icon_double_tap_action: '[[[ return variables.ulm_icon_double_tap_action; ]]]'
+                  ulm_icon_double_tap_haptic: '[[[ return variables.ulm_icon_double_tap_haptic; ]]]'
+                  ulm_icon_double_tap_navigate_path: '[[[ return variables.ulm_icon_double_tap_navigate_path; ]]]'
+                  ulm_icon_double_tap_service: '[[[ return variables.ulm_icon_double_tap_service; ]]]'
+                  ulm_icon_double_tap_service_data: '[[[ return variables.ulm_icon_double_tap_service_data]]]'
+                  ulm_custom_popup: '[[[ return variables.ulm_custom_popup; ]]]'
+                styles:
+                  card:
+                    - overflow: |
+                        [[[
+                          if (entity.state == "unavailable"){
+                            return "visible"
+                          }
+                          return "hidden"
+                        ]]]
+            item2:
+              card:
+                type: custom:button-card
+                show_icon: false
+                entity: '[[[ return entity.entity_id ]]]'
+                template:
+                  - icon_info
+                  - ulm_actions_name
+                variables:
+                  ulm_input_select_option: '[[[ return variables.ulm_input_select_option; ]]]'
+                  ulm_input_select: '[[[ return variables.ulm_input_select; ]]]'
+                  ulm_name_tap_action: '[[[ return variables.ulm_name_tap_action; ]]]'
+                  ulm_name_tap_haptic: '[[[ return variables.ulm_name_tap_haptic; ]]]'
+                  ulm_name_tap_navigate_path: '[[[ return variables.ulm_name_tap_navigate_path; ]]]'
+                  ulm_name_tap_service: '[[[ return variables.ulm_name_tap_service; ]]]'
+                  ulm_name_tap_service_data: '[[[ return variables.ulm_name_tap_service_data]]]'
+                  ulm_name_hold_action: '[[[ return variables.ulm_name_hold_action; ]]]'
+                  ulm_name_hold_haptic: '[[[ return variables.ulm_name_hold_haptic; ]]]'
+                  ulm_name_hold_navigate_path: '[[[ return variables.ulm_name_hold_navigate_path; ]]]'
+                  ulm_name_hold_service: '[[[ return variables.ulm_name_hold_service; ]]]'
+                  ulm_name_hold_service_data: '[[[ return variables.ulm_name_hold_service_data]]]'
+                  ulm_name_double_tap_action: '[[[ return variables.ulm_name_double_tap_action; ]]]'
+                  ulm_name_double_tap_haptic: '[[[ return variables.ulm_name_double_tap_haptic; ]]]'
+                  ulm_name_double_tap_navigate_path: '[[[ return variables.ulm_name_double_tap_navigate_path; ]]]'
+                  ulm_name_double_tap_service: '[[[ return variables.ulm_name_double_tap_service; ]]]'
+                  ulm_name_double_tap_service_data: '[[[ return variables.ulm_name_double_tap_service_data]]]'
+                  ulm_custom_popup: '[[[ return variables.ulm_custom_popup; ]]]'
+                styles:
+                  card:
+                    - overflow: visible
+                    - padding: 6px
+                    - margin-left: '-6px'
+                    - background-color: rgba(0,0,0,0)
+                  custom_fields:
+                    notification:
+                      - display: none
+  ulm_translation_engine:
+    variables:
+      ulm_translation_back: '[[[ return hass.resources[hass[''language'']][''ui.common.back'']; ]]]'
+      ulm_translation_brightness: >-
+        [[[ return hass.resources[hass['language']]['ui.card.light.brightness'];
+        ]]]
+      ulm_translation_color_temperature: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.card.light.color_temperature']; ]]]
+      ulm_translation_status: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.dialogs.more_info_control.vacuum.status'];
+        ]]]
+      ulm_translation_scenes: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.dialogs.quick-bar.commands.reload.scene'];
+        ]]]
+      ulm_translation_source: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.card.media_player.source']; ]]]
+      ulm_translation_history: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.dialogs.more_info_control.history'];
+        ]]]
+      ulm_translation_close_cover: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.dialogs.more_info_control.cover.close_cover'];
+        ]]]
+      ulm_translation_stop_cover: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.dialogs.more_info_control.cover.stop_cover'];
+        ]]]
+      ulm_translation_open_cover: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.dialogs.more_info_control.cover.open_cover'];
+        ]]]
+      ulm_translation_more_options: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.panel.lovelace.editor.edit_card.options'];
+        ]]]
+      ulm_active_state: |
+        [[[
+          if (typeof(entity) !== 'undefined' && entity !== undefined){
+            let not_active = ['disarmed','off','closed','not_home','standby','idle','docked','unknown','unavailable','paused']
+            function containsNumbers(str) {
+              return /\d/.test(str);
+            }
+            return (!not_active.includes(entity.state) && !containsNumbers(entity.state))
+          }
+        ]]]
+      ulm_translation_hvac: |
+        [[[
+          if (typeof(entity) !== 'undefined' && entity !== undefined){
+            let state = entity.state;
+            let d_class = entity.attributes.device_class;
+            let def = ["unknown", "unavailable"];
+            let lang = hass["language"];
+            let action = entity.attributes.hvac_action;
+            let domain = entity.entity_id.substr(0, entity.entity_id.indexOf("."));
+            var mode = hass.resources[lang]["state_attributes." + domain + ".hvac_action." + action];
+            if (def.includes(state)) {
+              var mode = hass.resources[lang]["state.default." + state ];
+            }
+            var label = hass.resources[lang]["component." + domain + ".state._." + state];
+            var translation = label ? label : state;
+            return (entity.attributes.current_temperature ) + '°' + ' • ' + translation + ((entity.state !='off' && mode !== undefined) ? ' (' + mode + ')' : '');
+            }
+        ]]]
+      ulm_translation_off: '[[[ return hass.resources[hass[''language'']][''state.default.off'']; ]]]'
+      ulm_translation_on: '[[[ return hass.resources[hass[''language'']][''state.default.on'']; ]]]'
+      ulm_translation_state: |
+        [[[
+          if (typeof(entity) !== 'undefined' && entity !== undefined){
+            let state = entity.state;
+            let d_class = entity.attributes.device_class;
+            let def = ["unknown", "unavailable"];
+            let lang = hass["language"];
+            let domain = entity.entity_id.substr(0, entity.entity_id.indexOf("."));
+            var translation = hass.resources[lang]["component." + domain + ".entity_component._.state." + state]
+            let display_precision = hass.entities[entity.entity_id]?.display_precision
+            const now = new Date();
+            const timestamp = (new Date(state)).getTime();
+            const nowTimeStamp = now.getTime();
+            const microSecondsDiff = Math.round(timestamp - nowTimeStamp);
+            const daysDiff = Math.round(microSecondsDiff / (1000 * 60 * 60  * 24));
+            const hoursDiff = Math.round(microSecondsDiff / (1000 * 60 * 60));
+            const minutesDiff = Math.round(microSecondsDiff / (1000 * 60));
+            const secondsDiff = Math.round(microSecondsDiff / (1000));
+            const formatter = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
+            var scale = 'day'
+            var diff = daysDiff
+            if (Math.abs(secondsDiff) < 60){ scale = 'second'; diff = secondsDiff }
+            else if (Math.abs(minutesDiff) < 60){ scale = 'minute'; diff = minutesDiff }
+            else if (Math.abs(hoursDiff) < 24){ scale = 'hour'; diff = hoursDiff }
+
+            if (def.includes(state)) {
+              var translation = hass.resources[lang]["state.default." + state ];
+            }
+            else if (domain == "binary_sensor" && d_class != ''){
+              var translation = hass.resources[lang]["component." + domain + ".entity_component." + d_class + ".state." + state]
+            }
+            else if (d_class == 'timestamp'){
+              var translation = formatter.format(diff, scale)
+            }
+            else if (parseFloat(display_precision) >=0){
+              var translation = parseFloat(entity.state).toFixed(display_precision?.toString())
+            }
+            return translation ? translation.charAt(0).toUpperCase() + translation.slice(1) : state;
+          }
+        ]]]
+      ulm_translation_state_reverse: |
+        [[[
+          if (typeof(entity) !== 'undefined' && entity !== undefined){
+            let state = entity.state;
+            let def = ["unknown", "unavailable"];
+            let lang = hass["language"];
+            if (state === "on"){
+              var translation = hass.resources[lang]["state.default.off"];
+            } else if (state === "off"){
+              var translation = hass.resources[lang]["state.default.on"];
+            }
+            if (def.includes(state)) {
+              var translation = hass.resources[lang]["state.default." + state ];
+            }
+            return translation ? translation : state;
+          }
+        ]]]
+      ulm_translation_state_unit: |
+        [[[
+          if (typeof(entity) !== 'undefined' && entity !== undefined){
+            let state = entity.state;
+            let d_class = entity.attributes.device_class;
+            let def = ["unknown", "unavailable"];
+            let lang = hass["language"];
+            let domain = entity.entity_id.substr(0, entity.entity_id.indexOf("."));
+            let unit = entity.attributes.unit_of_measurement != null ? " " + entity.attributes.unit_of_measurement : "";
+            let display_precision = hass.entities[entity.entity_id]?.display_precision
+            const now = new Date();
+            const timestamp = (new Date(state)).getTime();
+            const nowTimeStamp = now.getTime();
+            const microSecondsDiff = Math.round(timestamp - nowTimeStamp);
+            const daysDiff = Math.round(microSecondsDiff / (1000 * 60 * 60  * 24));
+            const hoursDiff = Math.round(microSecondsDiff / (1000 * 60 * 60));
+            const minutesDiff = Math.round(microSecondsDiff / (1000 * 60));
+            const secondsDiff = Math.round(microSecondsDiff / (1000));
+            const formatter = new Intl.RelativeTimeFormat(lang, { numeric: 'auto' });
+
+            var scale = 'day'
+            var diff = daysDiff
+            if (Math.abs(secondsDiff) < 60){ scale = 'second'; diff = secondsDiff }
+            else if (Math.abs(minutesDiff) < 60){ scale = 'minute'; diff = minutesDiff }
+            else if (Math.abs(hoursDiff) < 24){ scale = 'hour'; diff = hoursDiff }
+
+            if(hass.resources[lang]["component." + domain + ".entity_component._.state." + state]){
+            var translation = hass.resources[lang]["component." + domain + ".entity_component._.state." + state] + unit
+            } else {
+            var translation =  state + unit;
+            }
+            if (def.includes(state)) {
+              var translation = hass.resources[lang]["state.default." + state ];
+            }
+            else if (domain == "binary_sensor" && d_class != ''){
+              var translation = hass.resources[lang]["component." + domain + ".entity_component." + d_class + ".state." + state]
+            }
+            else if (domain == "media_player" && d_class != ''){
+              if (state == 'idle' || state == 'paused')
+                var translation = hass.resources[lang]["component." + domain + ".entity_component._.state." + state];
+              else {
+                var translation = (entity.attributes.source) + ' • ' +  ( Math.round(entity.attributes.volume_level / 0.01)) + '%' ;
+              }
+            }
+            else if (d_class == 'timestamp'){
+              var translation = formatter.format(diff, scale);
+            }
+            else if (parseFloat(display_precision) >=0){
+              var translation = parseFloat(entity.state).toFixed(display_precision?.toString()) + unit
+            }
+            return translation ? translation.charAt(0).toUpperCase() + translation.slice(1) : state;
+          }
+        ]]]
+      ulm_translation_statistics: >-
+        [[[ return
+        hass.resources[hass['language']]['ui.components.statistic-picker.statistic'];
+        ]]]
+      ulm_translation_unavailable: >-
+        [[[ return
+        hass.resources[hass['language']]['state.default.unavailable']; ]]]
+      ulm_translation_currency: |
+        [[[
+          var hasscurrency = hass.config["currency"];
+          var currency =
+          { "AFA": "؋",
+            "ALL": "Lek",
+            "DZD": "دج",
+            "AOA": "Kz",
+            "ARS": "$",
+            "AMD": "֏",
+            "AWG": "ƒ",
+            "AUD": "$",
+            "AZN": "m",
+            "BSD": "B$",
+            "BHD": ".د.ب",
+            "BDT": "৳",
+            "BBD": "Bds$",
+            "BYR": "Br",
+            "BEF": "fr",
+            "BZD": "$",
+            "BMD": "$",
+            "BTN": "Nu.",
+            "BTC": "฿",
+            "BOB": "Bs.",
+            "BAM": "KM",
+            "BWP": "P",
+            "BRL": "R$",
+            "GBP": "£",
+            "BND": "B$",
+            "BGN": "Лв.",
+            "BIF": "FBu",
+            "KHR": "KHR",
+            "CAD": "$",
+            "CVE": "$",
+            "KYD": "$",
+            "XOF": "CFA",
+            "XAF": "FCFA",
+            "XPF": "₣",
+            "CLP": "$",
+            "CNY": "¥",
+            "COP": "$",
+            "KMF": "CF",
+            "CDF": "FC",
+            "CRC": "₡",
+            "HRK": "kn",
+            "CUC": "$, CUC",
+            "CZK": "Kč",
+            "DKK": "Kr.",
+            "DJF": "Fdj",
+            "DOP": "$",
+            "XCD": "$",
+            "EGP": "ج.م",
+            "ERN": "Nfk",
+            "EEK": "kr",
+            "ETB": "Nkf",
+            "EUR": "€",
+            "FKP": "£",
+            "FJD": "FJ$",
+            "GMD": "D",
+            "GEL": "ლ",
+            "DEM": "DM",
+            "GHS": "GH₵",
+            "GIP": "£",
+            "GRD": "₯, Δρχ, Δρ",
+            "GTQ": "Q",
+            "GNF": "FG",
+            "GYD": "$",
+            "HTG": "G",
+            "HNL": "L",
+            "HKD": "$",
+            "HUF": "Ft",
+            "ISK": "kr",
+            "INR": "₹",
+            "IDR": "Rp",
+            "IRR": "﷼",
+            "IQD": "د.ع",
+            "ILS": "₪",
+            "ITL": "L,£",
+            "JMD": "J$",
+            "JPY": "¥",
+            "JOD": "ا.د",
+            "KZT": "лв",
+            "KES": "KSh",
+            "KWD": "ك.د",
+            "KGS": "лв",
+            "LAK": "₭",
+            "LVL": "Ls",
+            "LBP": "£",
+            "LSL": "L",
+            "LRD": "$",
+            "LYD": "د.ل",
+            "LTL": "Lt",
+            "MOP": "$",
+            "MKD": "ден",
+            "MGA": "Ar",
+            "MWK": "MK",
+            "MYR": "RM",
+            "MVR": "Rf",
+            "MRO": "MRU",
+            "MUR": "₨",
+            "MXN": "$",
+            "MDL": "L",
+            "MNT": "₮",
+            "MAD": "MAD",
+            "MZM": "MT",
+            "MMK": "K",
+            "NAD": "$",
+            "NPR": "₨",
+            "ANG": "ƒ",
+            "TWD": "$",
+            "NZD": "$",
+            "NIO": "C$",
+            "NGN": "₦",
+            "KPW": "₩",
+            "NOK": "kr",
+            "OMR": ".ع.ر",
+            "PKR": "₨",
+            "PAB": "B/.",
+            "PGK": "K",
+            "PYG": "₲",
+            "PEN": "S/.",
+            "PHP": "₱",
+            "PLN": "zł",
+            "QAR": "ق.ر",
+            "RON": "lei",
+            "RUB": "₽",
+            "RWF": "FRw",
+            "SVC": "₡",
+            "WST": "SAT",
+            "SAR": "﷼",
+            "RSD": "din",
+            "SCR": "SRe",
+            "SLL": "Le",
+            "SGD": "$",
+            "SKK": "Sk",
+            "SBD": "Si$",
+            "SOS": "Sh.so.",
+            "ZAR": "R",
+            "KRW": "₩",
+            "XDR": "SDR",
+            "LKR": "Rs",
+            "SHP": "£",
+            "SDG": ".س.ج",
+            "SRD": "$",
+            "SZL": "E",
+            "SEK": "kr",
+            "CHF": "CHf",
+            "SYP": "LS",
+            "STD": "Db",
+            "TJS": "SM",
+            "TZS": "TSh",
+            "THB": "฿",
+            "TOP": "$",
+            "TTD": "$",
+            "TND": "ت.د",
+            "TRY": "₺",
+            "TMT": "T",
+            "UGX": "USh",
+            "UAH": "₴",
+            "AED": "إ.د",
+            "UYU": "$",
+            "USD": "$",
+            "UZS": "лв",
+            "VUV": "VT",
+            "VEF": "Bs",
+            "VND": "₫",
+            "YER": "﷼",
+            "ZMK": "ZK"
+          }
+          return currency[hasscurrency];
+        ]]]
+  icon_more_info:
+    show_icon: false
+    show_name: false
+    show_label: false
+    template:
+      - list_2_items
+    styles:
+      grid:
+        - grid-template-columns: min-content auto
+        - column-gap: 0px
+      card:
+        - background-color: rgba(0,0,0,0)
+    hold_action:
+      action: more-info
+    custom_fields:
+      item1:
+        card:
+          type: custom:button-card
+          entity: '[[[ return entity.entity_id ]]]'
+          template:
+            - icon
+          styles:
+            card:
+              - overflow: visible
+          tap_action:
+            action: more-info
+      item2:
+        card:
+          type: custom:button-card
+          show_icon: false
+          entity: '[[[ return entity.entity_id ]]]'
+          template:
+            - icon_info
+          styles:
+            card:
+              - padding: 6px
+              - margin-left: '-6px'
+              - background-color: rgba(0,0,0,0)
+          custom_fields: null
+  widget_icon:
+    tap_action:
+      action: toggle
+    show_icon: true
+    show_name: false
+    styles:
+      grid:
+        - grid-template-areas: '''i'''
+      card:
+        - box-shadow: none
+        - padding: 0px
+        - background-color: rgba(var(--color-theme),0.05)
+        - border-radius: 14px
+        - place-self: center
+        - height: 42px
+      icon:
+        - color: rgba(var(--color-theme),0.9)
+    size: 20px
+    color: '#BBBBBB'
+  ulm_card_cover:
+    template:
+      - icon_more_info_new
+      - ulm_translation_engine
+    variables:
+      ulm_card_cover_name: '[[[ return entity.attributes.friendly_name ]]]'
+      ulm_card_cover_icon: false
+      ulm_card_cover_color: blue
+      ulm_card_invert_percent: false
+      ulm_card_cover_invert_percent: false
+      ulm_card_cover_display_left_right: false
+      ulm_card_cover_garage_large: false
+      ulm_card_cover_gate: false
+      ulm_card_cover_enable_controls: false
+      ulm_card_cover_favorite_percentage: null
+      ulm_card_cover_enable_slider: false
+      ulm_card_cover_slider_min: 0
+      ulm_card_cover_slider_max: 100
+      ulm_card_cover_enable_tilt: false
+      ulm_card_cover_enable_horizontal: false
+      ulm_card_cover_enable_popup: false
+      ulm_card_cover_show_last_changed: false
+      ulm_card_cover_force_background_color: false
+    show_icon: false
+    show_name: false
+    show_label: false
+    show_last_changed: false
+    state:
+      - operator: template
+        value: '[[[ return variables.ulm_active_state ]]]'
+        styles:
+          card:
+            - background-color: |
+                [[[
+                    if (variables.ulm_card_cover_color) {
+                      if (variables.ulm_card_cover_force_background_color) {
+                        var color = variables.ulm_card_cover_color;
+                        return 'rgba(var(--color-' + color + '),var(--opacity-bg))';
+                      }
+                    }
+                ]]]
+    styles:
+      grid:
+        - grid-template-areas: |
+            [[[
+                if (variables.ulm_card_cover_enable_horizontal) {
+
+                    var hor_area = ["item1"];
+                    var ver_area = [];
+
+                    if (variables.ulm_card_cover_enable_controls) {
+                      if (variables.ulm_card_cover_enable_horizontal == "controls" || variables.ulm_card_cover_enable_horizontal == true) {
+                        hor_area.push("item2");
+                      } else {
+                        ver_area.push("item2" + " " + "item2");
+                      }
+                    }
+                    if (variables.ulm_card_cover_enable_slider) {
+                      if (variables.ulm_card_cover_enable_horizontal == "slider") {
+                        hor_area.push("item3");
+                      } else {
+                        ver_area.push("item3" + " " + "item3");
+                      }
+                    }
+                    if (variables.ulm_card_cover_enable_tilt) {
+                      if (variables.ulm_card_cover_enable_horizontal == "tilt") {
+                        hor_area.push("item4");
+                      } else {
+                        ver_area.push("item4" + " " + "item4");
+                      }
+                    }
+
+                    if (ver_area.length < 1) {
+                      return "\"" + hor_area.join(" ") + "\" ";
+                    } else {
+                      return "\"" + hor_area.join(" ") + "\" " + "\"" + ver_area.join("\" \"") + "\"";
+                    }
+                } else {
+                    var areas = [];
+                    areas.push("item1");
+
+                    if (variables.ulm_card_cover_enable_controls) {
+                      areas.push("item2");
+                    }
+                    if (variables.ulm_card_cover_enable_slider) {
+                        areas.push("item3");
+                    }
+                    if (variables.ulm_card_cover_enable_tilt) {
+                      areas.push("item4");
+                    }
+
+                    return "\"" + areas.join("\" \"") + "\"";
+                }
+            ]]]
+        - grid-template-columns: |
+            [[[
+                if (variables.ulm_card_cover_enable_horizontal) {
+                    return "1fr 1fr";
+                }
+                return "1fr";
+            ]]]
+        - grid-template-rows: |
+            [[[
+                var rows = [];
+                rows.push("min-content");
+                if (variables.ulm_card_cover_enable_controls) {
+                    rows.push("min-content");
+                }
+                if (variables.ulm_card_cover_enable_slider) {
+                    rows.push("min-content");
+                }
+                if (variables.ulm_card_cover_enable_tilt) {
+                    rows.push("min-content");
+                }
+                if (variables.ulm_card_cover_enable_horizontal) {
+                    if (rows.length > 1) {
+                      rows.pop()
+                    }
+                }
+                return rows.join(" ");
+            ]]]
+        - row-gap: 12px
+      card:
+        - border-radius: 20px
+        - box-shadow: var(--box-shadow)
+        - padding: 12px
+      custom_fields:
+        item2:
+          - display: |
+              [[[
+                if (variables.ulm_card_cover_enable_controls) {
+                    return "block";
+                } else {
+                    return "none";
+                }
+              ]]]
+        item3:
+          - display: |
+              [[[
+                if (variables.ulm_card_cover_enable_slider) {
+                    return "block";
+                } else {
+                    return "none";
+                }
+              ]]]
+        item4:
+          - display: |
+              [[[
+                if (variables.ulm_card_cover_enable_tilt) {
+                    return "block";
+                } else {
+                    return "none";
+                }
+              ]]]
+    custom_fields:
+      item1:
+        card:
+          type: custom:button-card
+          custom_fields:
+            item1:
+              card:
+                type: custom:button-card
+                entity: '[[[ return entity.entity_id ]]]'
+                variables: |
+                  [[[
+                    let vars = variables;
+                    if (variables.ulm_card_cover_enable_popup) {
+                        vars.ulm_custom_popup = {
+                            'template': 'popup_cover'
+                        };
+                    }
+                    return vars;
+                  ]]]
+                icon: |
+                  [[[
+                    var icon = entity.attributes.icon || "mdi:help-circle";
+                    var icon_state = {
+                      "open": "open",
+                      "opening": "open",
+                      "closed": "closed",
+                      "closing": "closed"
+                    };
+                    if(entity.attributes?.device_class){
+                      var device_class = entity.attributes?.device_class;
+                    }
+                    var icon_open = {
+                      "awning": "mdi:window-open",
+                      "blind": "mdi:blinds-open",
+                      "curtain": "mdi:curtains",
+                      "damper": "mdi:circle-outline",
+                      "door": "mdi:door-open",
+                      "garage": variables.ulm_card_cover_garage_large ? "mdi:garage-open-variant" : "mdi:garage-open",
+                      "gate": "mdi:gate-open",
+                      "shade": "mdi:roller-shade",
+                      "shutter": "mdi:window-shutter-open",
+                      "window": "mdi:window-open",
+                    };
+                    var icon_closed = {
+                      "awning": "mdi:window-closed",
+                      "blind": "mdi:blinds",
+                      "curtain": "mdi:curtains-closed",
+                      "damper": "mdi:circle-slice-8",
+                      "door": "mdi:door-closed",
+                      "garage": variables.ulm_card_cover_garage_large ? "mdi:garage-variant" : "mdi:garage",
+                      "gate": "mdi:gate",
+                      "shade": "mdi:roller-shade-closed",
+                      "shutter": "mdi:window-shutter",
+                      "window": "mdi:window-closed",
+                    };
+                    return variables.ulm_card_cover_icon || (icon_state[entity.state]=='open' ? icon_open[device_class] : icon_closed[device_class]) || icon
+                  ]]]
+                state:
+                  - value: open
+                    styles:
+                      icon:
+                        - color: rgb(135,168,247)
+                      img_cell:
+                        - background-color: rgba(135,168,247,0.15)
+                  - value: closed
+                    styles:
+                      icon:
+                        - color: |
+                            [[[
+                              let welcome = '';
+                              if (hass.themes.darkMode){
+                                welcome = 'rgb(74,78,90)';
+                              } else {
+                                welcome = 'rgb(210,212,222)';
+                              }
+                              return welcome;
+                            ]]]
+                      img_cell:
+                        - background-color: |
+                            [[[
+                              let welcome = '';
+                              if (hass.themes.darkMode){
+                                welcome = 'rgb(36,36,41)';
+                              } else {
+                                welcome = 'rgb(230,232,242)';
+                              }
+                              return welcome;
+                            ]]]
+            item2:
+              card:
+                type: custom:button-card
+                entity: '[[[ return entity.entity_id ]]]'
+                variables: |
+                  [[[
+                    let vars = variables;
+                    if(variables.ulm_card_cover_enable_popup) {
+                      vars.ulm_custom_popup = {
+                        'template': 'popup_cover'
+                      };
+                    }
+                    return vars;
+                  ]]]
+                name: '[[[ return variables.ulm_card_cover_name ]]]'
+                label: |
+                  [[[
+                    var position = states[entity.entity_id]?.attributes?.current_position;
+                    var invert = {
+                      "closed": hass.resources[hass['language']]['component.cover.state._.open'],
+                      "closing": hass.resources[hass['language']]['component.cover.state._.opening'],
+                      "open": hass.resources[hass['language']]['component.cover.state._.closed'],
+                      "opening": hass.resources[hass['language']]['component.cover.state._.closing']
+                    };
+
+                    if ((variables.ulm_card_invert_percent || variables.ulm_card_cover_invert_percent) && typeof entity !== "undefined") {
+                      if (position == 0) {
+                        return invert[entity.state] + " • " + (100 - position) + "%";
+                      } else {
+                        return invert[entity.state];
+                      }
+                    }
+
+                    if(["unknown", "unavailable", "closed"].includes(entity.state)  || position === undefined) {
+                      return variables.ulm_translation_state;
+                    }
+
+                    if (typeof entity !== "undefined") {
+                      if (entity == 0) {
+                        return variables.ulm_translation_state;
+                      } else {
+                        return variables.ulm_translation_state + " • " + position + "%";
+                      }
+                    }
+                    return variables.ulm_translation_state;
+                  ]]]
+                show_last_changed: '[[[ return variables.ulm_card_cover_show_last_changed; ]]]'
+                state:
+                  - operator: template
+                    value: '[[[ return variables.ulm_active_state ]]]'
+                    styles:
+                      name:
+                        - color: |
+                            [[[
+                                if (variables.ulm_card_cover_force_background_color) {
+                                    return 'rgb(250,250,250)';
+                                }
+                            ]]]
+                      label:
+                        - color: |
+                            [[[
+                                if (variables.ulm_card_cover_force_background_color) {
+                                    return 'rgb(250,250,250)';
+                                }
+                            ]]]
+      item2:
+        card:
+          type: custom:button-card
+          template: >-
+            [[[ return (variables.ulm_card_cover_favorite_percentage) ?
+            'list_4_items' : 'list_3_items' ]]]
+          styles:
+            card:
+              - background: none
+            custom_fields:
+              item4:
+                - display: |
+                    [[[
+                      if (variables.ulm_card_cover_favorite_percentage) {
+                          return "block";
+                      } else {
+                          return "none";
+                      }
+                    ]]]
+          custom_fields:
+            item1:
+              card:
+                type: custom:button-card
+                template: widget_icon
+                entity: '[[[ return entity.entity_id ]]]'
+                styles:
+                  card:
+                    - background-color: |
+                        [[[
+                          let welcome = '';
+                          if (hass.themes.darkMode){
+                            welcome = 'rgb(27,28,35)';
+                          } else {
+                            welcome = 'rgba(222,225,237,0.5)';
+                          }
+                          return welcome;
+                        ]]]
+                  img_cell:
+                    - background-color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),0.2)';
+                          }
+                          return 'rgba(var(--color-theme),0.05)';
+                        ]]]
+                state:
+                  - value: opening
+                    styles:
+                      card:
+                        - opacity: 50%
+                    tap_action:
+                      action: none
+                  - value: open
+                    styles:
+                      card:
+                        - opacity: 50%
+                    tap_action:
+                      action: none
+                tap_action:
+                  action: call-service
+                  service: cover.open_cover
+                  service_data:
+                    entity_id: '[[[ return entity.entity_id ]]]'
+                icon: mdi:arrow-left
+            item2:
+              card:
+                type: custom:button-card
+                template: widget_icon
+                entity: '[[[ return entity.entity_id ]]]'
+                styles:
+                  card:
+                    - background-color: |
+                        [[[
+                          let welcome = '';
+                          if (hass.themes.darkMode){
+                            welcome = 'rgb(27,28,35)';
+                          } else {
+                            welcome = 'rgba(222,225,237,0.5)';
+                          }
+                          return welcome;
+                        ]]] 
+                state:
+                  - value: open
+                    styles:
+                      card:
+                        - opacity: 50%
+                    tap_action:
+                      action: none
+                  - value: closed
+                    styles:
+                      card:
+                        - opacity: 50%
+                    tap_action:
+                      action: none
+                tap_action:
+                  action: call-service
+                  service: cover.stop_cover
+                  service_data:
+                    entity_id: '[[[ return entity.entity_id ]]]'
+                icon: mdi:pause
+            item3:
+              card:
+                type: custom:button-card
+                template: widget_icon
+                entity: '[[[ return entity.entity_id ]]]'
+                styles:
+                  card:
+                    - background-color: |
+                        [[[
+                          let welcome = '';
+                          if (hass.themes.darkMode){
+                            welcome = 'rgb(27,28,35)';
+                          } else {
+                            welcome = 'rgba(222,225,237,0.5)';
+                          }
+                          return welcome;
+                        ]]]
+                state:
+                  - value: closed
+                    styles:
+                      card:
+                        - opacity: 50%
+                    tap_action:
+                      action: none
+                  - value: closing
+                    styles:
+                      card:
+                        - opacity: 50%
+                    tap_action:
+                      action: none
+                tap_action:
+                  action: call-service
+                  service: cover.close_cover
+                  service_data:
+                    entity_id: '[[[ return entity.entity_id ]]]'
+                icon: |-
+                  [[[
+                    if (variables.ulm_card_cover_display_left_right) {
+                        return "mdi:arrow-right";
+                    }
+                    var device_class = entity.attributes?.device_class;
+                    if (device_class == 'curtain' || device_class == 'gate') {
+                        return "mdi:arrow-expand-horizontal";
+                    }
+                    return "mdi:arrow-up";
+                  ]]]
+            item4:
+              card:
+                type: custom:button-card
+                template: widget_icon
+                entity: '[[[ return entity.entity_id ]]]'
+                styles:
+                  card:
+                    - background-color: |
+                        [[[
+                          if(!hass.themes.darkMode && variables.ulm_card_cover_force_background_color){
+                            if (variables.ulm_active_state){
+                              return 'rgb(250,250,250)'
+                            }
+                          }
+                          return 'rgba(var(--color-theme),0.05)'
+                        ]]]
+                  img_cell:
+                    - background-color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),0.2)';
+                          }
+                          return 'rgba(var(--color-theme),0.05)';
+                        ]]]
+                  icon:
+                    - color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),1)';
+                          }
+                          return 'rgba(var(--color-theme),0.9)';
+                        ]]]
+                tap_action:
+                  action: call-service
+                  service: cover.set_cover_position
+                  service_data:
+                    entity_id: '[[[ return entity.entity_id ]]]'
+                    position: >-
+                      [[[ return variables.ulm_card_cover_favorite_percentage
+                      ]]]
+                icon: mdi:star
+      item3:
+        card:
+          type: custom:my-slider
+          entity: '[[[ return entity.entity_id ]]]'
+          radius: 14px
+          height: 42px
+          minSet: '[[[ return variables.ulm_card_cover_slider_min ]]]'
+          maxSet: '[[[ return variables.ulm_card_cover_slider_max ]]]'
+          mainSliderColor: |
+            [[[
+              var color = variables.ulm_card_cover_color;
+              if (variables.ulm_card_invert_percent || variables.ulm_card_cover_invert_percent) {
+                  if (entity.attributes.current_position == 100) {
+                      return 'rgba(var(--color-theme),0.05)';
+                  }
+                if (variables.ulm_card_cover_force_background_color) {
+                  return 'rgb(250,250,250)';
+                }
+                return 'rgba(var(--color-' + color + '),0.8)';
+              }
+
+              if (typeof entity !== "undefined") {
+                if (states[entity.entity_id].state != "closed") {
+                  if (variables.ulm_card_cover_force_background_color) {
+                    return 'rgb(250,250,250)';
+                  }
+                  return 'rgba(var(--color-' + color + '),0.8)';
+                }
+                return 'rgba(var(--color-theme),0.05)';
+              }
+            ]]]
+          secondarySliderColor: |
+            [[[
+              var color = variables.ulm_card_cover_color;
+              if (variables.ulm_card_invert_percent || variables.ulm_card_cover_invert_percent) {
+                  if (entity.attributes.current_position == 100) {
+                      return 'rgba(var(--color-theme),0.05)';
+                  }
+                if (variables.ulm_card_cover_force_background_color) {
+                  return 'rgba(var(--color-' + color + '),0.3)';
+                }
+                return 'rgba(var(--color-' + color + '),0.1)';
+              }
+
+              if (typeof entity !== "undefined") {
+                if (states[entity.entity_id].state != "closed") {
+                  if (variables.ulm_card_cover_force_background_color) {
+                    return 'rgba(var(--color-' + color + '),0.3)';
+                  }
+                  return 'rgba(var(--color-' + color + '),0.1)';
+                }
+                return 'rgba(var(--color-theme),0.05)';
+              }
+            ]]]
+          mainSliderColorOff: rgba(var(--color-theme),0.05)
+          secondarySliderColorOff: rgba(var(--color-theme),0.05)
+          thumbHorizontalPadding: 0px
+          thumbVerticalPadding: 0px
+          thumbWidth: 0px
+          card_mod: null
+          style: |
+            ha-card {
+              border-radius: 14px;
+              box-shadow: none;
+            }
+      item4:
+        card:
+          type: custom:button-card
+          template: list_3_items
+          styles:
+            card:
+              - background: none
+          custom_fields:
+            item1:
+              card:
+                type: custom:button-card
+                template: widget_icon
+                entity: '[[[ return entity.entity_id ]]]'
+                styles:
+                  card:
+                    - background-color: |
+                        [[[
+                          if(!hass.themes.darkMode && variables.ulm_card_cover_force_background_color){
+                            if (variables.ulm_active_state){
+                              return 'rgb(250,250,250)'
+                            }
+                          }
+                          return 'rgba(var(--color-theme),0.05)'
+                        ]]
+                  img_cell:
+                    - background-color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),0.2)';
+                          }
+                          return 'rgba(var(--color-theme),0.05)';
+                        ]]]
+                  icon:
+                    - color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),1)';
+                          }
+                          return 'rgba(var(--color-theme),0.9)';
+                        ]]]
+                state:
+                  - operator: template
+                    value: |
+                      [[[
+                        return entity.attributes.current_tilt_position == "0";
+                      ]]]
+                    styles:
+                      icon:
+                        - color: rgba(var(--color-theme),0.4)
+                  - operator: template
+                    value: |
+                      [[[
+                        return entity.state == "closing";
+                      ]]]
+                    styles:
+                      icon:
+                        - color: rgba(var(--color-theme),0.4)
+                  - operator: template
+                    value: |
+                      [[[
+                        return entity.state == "opening";
+                      ]]]
+                    styles:
+                      icon:
+                        - color: rgba(var(--color-theme),0.4)
+                tap_action:
+                  action: call-service
+                  service: cover.close_cover_tilt
+                  service_data:
+                    entity_id: '[[[ return entity.entity_id ]]]'
+                icon: mdi:arrow-bottom-left
+            item2:
+              card:
+                type: custom:button-card
+                template: widget_icon
+                entity: '[[[ return entity.entity_id ]]]'
+                styles:
+                  card:
+                    - background-color: |
+                        [[[
+                          if(!hass.themes.darkMode && variables.ulm_card_cover_force_background_color){
+                            if (variables.ulm_active_state){
+                              return 'rgb(250,250,250)'
+                            }
+                          }
+                          return 'rgba(var(--color-theme),0.05)'
+                        ]]]
+                  img_cell:
+                    - background-color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),0.2)';
+                          }
+                          return 'rgba(var(--color-theme),0.05)';
+                        ]]]
+                  icon:
+                    - color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),1)';
+                          }
+                          return 'rgba(var(--color-theme),0.9)';
+                        ]]]
+                tap_action:
+                  action: call-service
+                  service: cover.stop_cover_tilt
+                  service_data:
+                    entity_id: '[[[ return entity.entity_id ]]]'
+                icon: mdi:stop
+            item3:
+              card:
+                type: custom:button-card
+                template: widget_icon
+                entity: '[[[ return entity.entity_id ]]]'
+                styles:
+                  card:
+                    - background-color: |
+                        [[[
+                          if(!hass.themes.darkMode && variables.ulm_card_cover_force_background_color){
+                            if (variables.ulm_active_state){
+                              return 'rgb(250,250,250)'
+                            }
+                          }
+                          return 'rgba(var(--color-theme),0.05)'
+                        ]]]
+                  img_cell:
+                    - background-color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),0.2)';
+                          }
+                          return 'rgba(var(--color-theme),0.05)';
+                        ]]]
+                  icon:
+                    - color: |
+                        [[[
+                          if (variables.ulm_card_cover_force_background_color && variables.ulm_active_state) {
+                            var color = variables.ulm_card_cover_color;
+                            return 'rgba(var(--color-' + color + '),1)';
+                          }
+                          return 'rgba(var(--color-theme),0.9)';
+                        ]]]
+                state:
+                  - operator: template
+                    value: |
+                      [[[
+                        return entity.attributes.current_tilt_position == "100";
+                      ]]]
+                    styles:
+                      icon:
+                        - color: rgba(var(--color-theme),0.4)
+                  - operator: template
+                    value: |
+                      [[[
+                        return entity.state == "closing";
+                      ]]]
+                    styles:
+                      icon:
+                        - color: rgba(var(--color-theme),0.4)
+                  - operator: template
+                    value: |
+                      [[[
+                        return entity.state == "opening";
+                      ]]]
+                    styles:
+                      icon:
+                        - color: rgba(var(--color-theme),0.4)
+                tap_action:
+                  action: call-service
+                  service: cover.open_cover_tilt
+                  service_data:
+                    entity_id: '[[[ return entity.entity_id ]]]'
+                icon: mdi:arrow-top-right
+  light:
+    icon: '[[[ return entity.attributes.icon ]]]'
+    tap_action:
+      action: toggle
+      haptic: medium
+    hold_action:
+      action: more-info
+      haptic: medium
+    custom_fields:
+      slider:
+        card:
+          type: custom:my-slider-v2
+          entity: light.ceiling
+          colorMode: brightness
+          styles:
+            container:
+              - background: none
+              - border-radius: 100px
+              - overflow: visible
+            card:
+              - height: 16px
+              - padding: 0 8px
+              - background: |
+                  [[[
+                    if (entity.state == "on") return "linear-gradient(90deg, rgba(255,255,255, 0.3) 0%, rgba(255,255,255, 1) 100%)";
+                    else return "var(--contrast4)";
+                  ]]]
+            track:
+              - overflow: visible
+              - background: none
+            progress:
+              - background: none
+            thumb:
+              - background: |
+                  [[[
+                    if (entity.state == "on") return "var(--black)";
+                    if (entity.state == "off") return "var(--contrast20)";
+                    else return "var(--contrast8)";
+                  ]]]
+              - top: 2px
+              - right: '-6px'
+              - height: 12px
+              - width: 12px
+              - border-radius: 100px
+    styles:
+      grid:
+        - grid-template-areas: '"i" "n" "slider"'
+        - grid-template-columns: 1fr
+        - grid-template-rows: 1fr min-content min-content
+      card:
+        - background: var(--contrast2)
+        - padding: 16px
+        - '--mdc-ripple-press-opacity': 0
+      img_cell:
+        - justify-self: start
+        - width: 24px
+      icon:
+        - width: 24px
+        - height: 24px
+        - color: var(--contrast8)
+      name:
+        - justify-self: start
+        - font-size: 14px
+        - margin: 4px 0 12px 0
+        - color: var(--contrast8)
+    state:
+      - value: 'on'
+        styles:
+          card:
+            - background: var(--yellow)
+          icon:
+            - color: var(--black)
+          name:
+            - color: var(--black)
+      - value: 'off'
+        styles:
+          icon:
+            - color: var(--contrast20)
+          name:
+            - color: var(--contrast20)
+  light_2:
+    show_label: true
+    tap_action:
+      action: toggle
+    double_tap_action:
+      action: more-info
+    state:
+      - value: 'on'
+        styles:
+          card:
+            - background: var(--button-card-light-color)
+          icon:
+            - color: white
+          name:
+            - color: white
+          label:
+            - color: white
+      - value: 'off'
+        styles:
+          card:
+            - background: null
+            - opacity: 65%
+    styles:
+      icon:
+        - width: 26px
+      img_cell:
+        - justify-self: end
+        - width: 30px
+        - height: 30px
+        - margin-top: '-7%'
+      name:
+        - justify-self: start
+        - font-size: 17px
+        - line-height: 20pt
+        - font-weight: 550
+      label:
+        - justify-self: start
+        - font-size: 13px
+      card:
+        - height: 115px
+        - padding: 18px
+  light_color:
+    icon: '[[[ return entity.attributes.icon ]]]'
+    tap_action:
+      action: toggle
+      haptic: medium
+    hold_action:
+      action: more-info
+      haptic: medium
+    custom_fields:
+      slider:
+        card:
+          type: custom:my-slider-v2
+          entity: '[[[ return entity.entity_id ]]]'
+          colorMode: brightness
+          styles:
+            container:
+              - background: none
+              - border-radius: 100px
+              - overflow: visible
+            card:
+              - height: 16px
+              - padding: 0 8px
+              - background: |
+                  [[[
+                    if (entity.state == "on") return "linear-gradient(90deg, rgba(255,255,255, 0.3) 0%, rgba(255,255,255, 1) 100%)";
+                    else return "var(--contrast4)";
+                  ]]]
+            track:
+              - overflow: visible
+              - background: none
+            progress:
+              - background: none
+            thumb:
+              - background: |
+                  [[[
+                    if (entity.state == "on") return "var(--black)";
+                    if (entity.state == "off") return "var(--contrast20)";
+                    else return "var(--contrast8)";
+                  ]]]
+              - top: 2px
+              - right: '-8px'
+              - height: 12px
+              - width: 12px
+              - border-radius: 10px
+    styles:
+      grid:
+        - grid-template-areas: '"i" "n" "slider"'
+        - grid-template-columns: 1fr
+        - grid-template-rows: 1fr min-content min-content
+      card:
+        - background: var(--contrast2)
+        - padding: 16px
+        - '--mdc-ripple-press-opacity': 0
+      img_cell:
+        - justify-self: start
+        - width: 24px
+      icon:
+        - width: 24px
+        - height: 24px
+        - color: var(--contrast8)
+      name:
+        - justify-self: start
+        - font-size: 14px
+        - margin: 4px 0 12px 0
+        - color: var(--contrast8)
+    state:
+      - value: 'on'
+        styles:
+          card:
+            - background: |
+                [[[
+                    var color = entity.attributes?.rgb_color;
+                    if (entity.state != "on"){
+                      return 'var(--contrast20)';
+                    }
+                    else if (color){
+                      return 'rgba(' + color + ')'
+                    }
+                    else{
+                      return 'var(--yellow)'
+                    }
+                ]]]
+          icon:
+            - color: var(--black)
+          name:
+            - color: var(--black)
+      - value: 'off'
+        styles:
+          icon:
+            - color: var(--contrast20)
+          name:
+            - color: var(--contrast20)
+  blue_no_state:
+    styles:
+      icon:
+        - color: rgba(137,179,248,1)
+      label:
+        - color: rgba(var(--color-blue-text),1)
+      name:
+        - color: rgba(var(--color-blue-text),1)
+      img_cell:
+        - background-color: rgba(137,179,248,0.2)
+  toggle:
+    show_state: true
+    tap_action:
+      action: toggle
+      haptic: medium
+    state:
+      - value: 'on'
+        styles:
+          card:
+            - background-color: var(--green)
+            - box-shadow: none
+          icon:
+            - color: var(--black)
+          name:
+            - color: var(--black)
+          state:
+            - color: var(--black)
+            - opacity: '0.5'
+      - value: open
+        styles:
+          card:
+            - background-color: var(--blue)
+            - box-shadow: none
+          icon:
+            - color: var(--black)
+          name:
+            - color: var(--black)
+          state:
+            - color: var(--black)
+            - opacity: '0.5'
+      - value: 'off'
+        styles:
+          card:
+            - background: var(--contrast2)
+            - box-shadow: none
+          icon:
+            - width: 24px
+            - color: var(--contrast20)
+          name:
+            - color: var(--contrast20)
+          label:
+            - color: var(--contrast9)
+    styles:
+      icon:
+        - width: 24px
+      img_cell:
+        - justify-content: flex-start
+        - margin-top: '-4px'
+      name:
+        - justify-self: start
+        - font-size: 12px
+        - font-weight: 700
+        - margin-bottom: 0px
+      card:
+        - height: 84px
+        - border-radius: 24px
+        - padding: 12px 0 12px 14px
+        - box-sizing: border-box
+        - '--mdc-ripple-press-opacity': 0
+      state:
+        - justify-self: start
+        - font-size: 12px
+  entity:
+    show_state: true
+    tap_action:
+      action: more-info
+      haptic: medium
+    state:
+      - value: 'on'
+        styles:
+          card:
+            - background-color: var(--yellow)
+            - box-shadow: none
+          icon:
+            - color: var(--black)
+          name:
+            - color: var(--black)
+          label:
+            - color: var(--black)
+            - opacity: '0.5'
+      - value: 'off'
+        styles:
+          card:
+            - background: var(--contrast2)
+            - box-shadow: none
+          icon:
+            - width: 24px
+            - color: var(--contrast20)
+          name:
+            - color: var(--contrast20)
+          label:
+            - color: var(--contrast9)
+    styles:
+      grid:
+        - grid-template-columns: 33% auto 33%
+        - grid-template-rows: 34% 16% 25% 25%
+        - grid-template-areas: |
+            "i i i"
+            ". . ."
+            "s s s"
+            "n n n"
+      icon:
+        - width: 26px
+        - margin-left: '-0.5%'
+        - margin-top: 1%
+      img_cell:
+        - justify-content: flex-start
+        - margin-top: '-4px'
+      state:
+        - justify-self: start
+        - font-size: 14px
+        - font-weight: 700
+        - margin-bottom: 0px
+      card:
+        - height: 100px
+        - border-radius: 24px
+        - padding: 12px 0 12px 14px
+        - box-sizing: border-box
+        - '--mdc-ripple-press-opacity': 0
+      name:
+        - justify-self: start
+        - font-size: 12px
+views:
+  - title: Home
+    layout:
+      width: 265
+      padding: 15px
+    theme: Rounded
+    type: custom:vertical-layout
+    icon: mdi:home
+    cards:
+      - type: custom:button-card
+        name: Home
+        custom_fields:
+          badge:
+            card:
+              type: conditional
+              conditions:
+                - condition: numeric_state
+                  entity: sensor.pending_update_counter
+                  above: 0
+              card:
+                type: custom:button-card
+                name: |
+                  [[[ 
+                    return states['sensor.pending_update_counter'].state + ' updates available'
+                  ]]]
+                label: →
+                show_label: true
+                show_icon: false
+                tap_action:
+                  action: navigate
+                  navigation_path: /mobile/config/
+                styles:
+                  grid:
+                    - grid-template-areas: '"n gutter l"'
+                    - grid-template-columns: min-content 5px min-content
+                    - grid-template-rows: min-content
+                  card:
+                    - padding: 6px 10px
+                    - font-size: 12px
+                    - line-height: 18px
+                    - font-weight: 500
+                    - background: var(--contrast20)
+                  name:
+                    - color: var(--contrast1)
+                  label:
+                    - color: var(--contrast12)
+        styles:
+          grid:
+            - grid-template-areas: '"n" "badge"'
+          card:
+            - background: none
+            - padding: 16px 0
+            - '--mdc-ripple-press-opacity': 0
+          name:
+            - font-size: 32px
+            - color: var(--contrast20)
+            - margin-top: '-5%'
+          custom_fields:
+            badge:
+              - margin: 16px auto 0 auto
+              - '--mdc-ripple-press-opacity': 0.5
+        card_mod:
+          style: |
+            ha-card {
+              box-shadow: none
+            }
+      - type: custom:swipe-card
+        card_width: calc(100% - 48px)
+        parameters:
+          centeredSlides: true
+          slidesPerView: auto
+          spaceBetween: 16
+          initialSlide: 0
+        cards:
+          - type: sensor
+            entity: TEMPERATURE_SENSOR
+            hours_to_show: 24
+            detail: 1
+            graph: line
+            name: Bedroom
+            icon: none
+            card_mod:
+              class: graph
+          - type: sensor
+            entity: LIGHT_SENSOR
+            hours_to_show: 24
+            detail: 1
+            graph: line
+            name: Ambient Light
+            icon: none
+            card_mod:
+              class: graph
+              background: var(--blue-tint)
+      - type: custom:swipe-card
+        parameters:
+          centeredSlides: true
+          slidesPerView: auto
+          spaceBetween: 16
+          initialSlide: 0
+        cards:
+          - columns: 4
+            type: grid
+            cards:
+              - type: custom:button-card
+                icon: mdi:power
+                aspect_ratio: 1/1
+                tap_action:
+                  action: call-service
+                  service: scene.turn_on
+                  haptic: medium
+                  service_data:
+                    entity_id: SCENE
+                styles:
+                  card:
+                    - border-radius: 24px
+                    - background-color: var(--black)
+                  icon:
+                    - color: var(--white)
+              - type: custom:button-card
+                icon: mdi:weather-cloudy
+                aspect_ratio: 1/1
+                tap_action:
+                  action: call-service
+                  service: scene.turn_on
+                  haptic: medium
+                  service_data:
+                    entity_id: SCENE
+                styles:
+                  card:
+                    - border-radius: 24px
+                    - background-color: var(--blue)
+                  icon:
+                    - color: var(--black)
+              - type: custom:button-card
+                icon: mdi:weather-sunset-down
+                aspect_ratio: 1/1
+                tap_action:
+                  action: call-service
+                  service: scene.turn_on
+                  haptic: medium
+                  service_data:
+                    entity_id: SCENE
+                styles:
+                  card:
+                    - border-radius: 24px
+                    - background-color: var(--yellow)
+                  icon:
+                    - color: var(--black)
+              - type: custom:button-card
+                icon: phu:scene-relax
+                aspect_ratio: 1/1
+                tap_action:
+                  action: call-service
+                  service: scene.turn_on
+                  haptic: medium
+                  service_data:
+                    entity_id: SCENE
+                styles:
+                  card:
+                    - border-radius: 24px
+                    - background-color: var(--orange)
+                  icon:
+                    - color: var(--black)
+          - columns: 4
+            type: grid
+            cards:
+              - type: custom:button-card
+                icon: mdi:city
+                aspect_ratio: 1/1
+                tap_action:
+                  action: call-service
+                  service: scene.turn_on
+                  haptic: medium
+                  service_data:
+                    entity_id: SCENE
+                styles:
+                  card:
+                    - border-radius: 24px
+                    - background-color: var(--purple)
+                  icon:
+                    - color: var(--black)
+              - type: custom:button-card
+                icon: mdi:palette
+                aspect_ratio: 1/1
+                tap_action:
+                  action: call-service
+                  service: scene.turn_on
+                  haptic: medium
+                  service_data:
+                    entity_id: SCENE
+                styles:
+                  card:
+                    - border-radius: 24px
+                    - background-color: var(--green)
+                  icon:
+                    - color: var(--black)
+              - type: custom:button-card
+                icon: mdi:lightbulb
+                aspect_ratio: 1/1
+                tap_action:
+                  action: call-service
+                  service: scene.turn_on
+                  haptic: medium
+                  service_data:
+                    entity_id: SCENE
+                styles:
+                  card:
+                    - border-radius: 24px
+                    - background-color: var(--red)
+                  icon:
+                    - color: var(--black)
+              - type: custom:button-card
+                icon: mdi:weather-night
+                aspect_ratio: 1/1
+                tap_action:
+                  action: call-service
+                  service: scene.turn_on
+                  haptic: medium
+                  service_data:
+                    entity_id: SCENE
+                styles:
+                  card:
+                    - border-radius: 24px
+                    - background-color: var(--black)
+                  icon:
+                    - color: var(--white)
+      - type: vertical-stack
+        cards:
+          - type: grid
+            columns: 2
+            square: false
+            cards:
+              - type: custom:button-card
+                template: light
+                entity: light.ceiling
+              - type: custom:button-card
+                template: light_color
+                entity: light.lamp_1
+              - type: custom:button-card
+                template: light_color
+                entity: light.dresser_lamp
+              - type: custom:button-card
+                template: light_color
+                entity: light.hue_go_1
+              - type: custom:button-card
+                template: light_color
+                entity: light.lightstrip
+              - type: custom:button-card
+                template: light_color
+                entity: light.h61ab_2w8rf
+          - type: custom:button-card
+            name: Brightness
+            custom_fields:
+              slider:
+                card:
+                  type: custom:my-slider-v2
+                  entity: light.active_bedroom_lights
+                  colorMode: brightness
+                  styles:
+                    container:
+                      - border-radius: 100px
+                      - overflow: visible
+                      - background: none
+                    card:
+                      - height: 40px
+                      - padding: 0 20px
+                      - background: var(--brightness)
+                    track:
+                      - overflow: visible
+                      - background: none
+                    progress:
+                      - background: none
+                    thumb:
+                      - background: var(--black)
+                      - top: 2px
+                      - right: '-18px'
+                      - height: 36px
+                      - width: 36px
+                      - border-radius: 100px
+            styles:
+              grid:
+                - grid-template-areas: '"n" "slider"'
+                - grid-template-columns: 1fr
+                - grid-template-rows: 1fr min-content min-content
+              card:
+                - background: var(--brightness-tint)
+                - padding: 16px
+                - '--mdc-ripple-press-opacity': 0
+              name:
+                - justify-self: start
+                - font-size: 14px
+                - margin: 4px 0 12px 0
+                - color: var(--contrast20)
+          - type: custom:button-card
+            name: Temperature
+            custom_fields:
+              slider:
+                card:
+                  type: custom:my-slider-v2
+                  entity: light.active_bedroom_lights
+                  colorMode: temperature
+                  styles:
+                    container:
+                      - border-radius: 100px
+                      - overflow: visible
+                      - background: none
+                    card:
+                      - height: 40px
+                      - padding: 0 20px
+                      - background: var(--temperature)
+                    track:
+                      - overflow: visible
+                      - background: none
+                    progress:
+                      - background: none
+                    thumb:
+                      - background: var(--black)
+                      - top: 2px
+                      - right: '-18px'
+                      - height: 36px
+                      - width: 36px
+                      - border-radius: 100px
+            styles:
+              grid:
+                - grid-template-areas: '"n" "slider"'
+                - grid-template-columns: 1fr
+                - grid-template-rows: 1fr min-content min-content
+              card:
+                - background: var(--temperature-tint)
+                - padding: 16px
+                - '--mdc-ripple-press-opacity': 0
+              name:
+                - justify-self: start
+                - font-size: 14px
+                - margin: 4px 0 12px 0
+                - color: var(--contrast20)
+      - type: custom:button-card
+        show_label: true
+        show_state: true
+        tap_action:
+          action: call-service
+          service: input_boolean.toggle
+          target:
+            entity_id: input_boolean.sheet_change_reminder_boolean
+        custom_fields:
+          arrow: |
+            [[[
+              var time = states["input_boolean.sheet_change_reminder_boolean"].state
+              let welcome = '';
+              if (time == 'on'){
+                welcome = '<ha-icon icon="mdi:toggle-switch" style="color: rgb(125,200,125); width:26px; height: 26px;"> </ha-icon>'
+              } else {
+                welcome = '<ha-icon icon="mdi:toggle-switch-off-outline" style="width:26px; height: 26px;"> </ha-icon>'
+              }
+              return welcome;
+            ]]]
+          count: |
+            [[[
+              return states["counter.sheetchangecounter"].state
+            ]]]
+          title: |
+            [[[ 
+              return 'Nights since last' + '<br>' + 'sheets change'
+            ]]]
+          note: |
+            [[[
+              return 'Reminders ' +  states['input_boolean.sheet_change_reminder_boolean'].state;
+            ]]]
+        styles:
+          grid:
+            - position: relative
+          card:
+            - padding-top: 25px
+            - padding-bottom: 25px
+            - height: 100pt
+          custom_fields:
+            arrow:
+              - position: absolute
+              - left: 39.5%
+              - top: 70%
+              - height: 40px
+              - width: 40px
+            title:
+              - position: absolute
+              - left: 41.5%
+              - top: 4%
+              - font-size: 20px
+              - text-align: left
+            note:
+              - position: absolute
+              - left: 54%
+              - top: 75%
+              - font-size: 14px
+            count:
+              - position: absolute
+              - left: 14%
+              - top: 12%
+              - justify-self: center
+              - font-weight: 800
+              - font-size: 40pt
+              - color: |
+                  [[[
+                    var time = states["counter.sheetchangecounter"].state
+                    let welcome = '';
+                    if (time >= 20){
+                      welcome = 'red'
+                    } else {
+                      welcome = 'null'
+                    }
+                    return welcome;
+                  ]]]
+              - animation: |
+                  [[[
+                    var time = states["counter.sheetchangecounter"].state
+                    let welcome = '';
+                    if (time >= 20){
+                      welcome = 'blink 3s ease infinite'
+                    } else {
+                      welcome = 'null'
+                    }
+                    return welcome;
+                  ]]]
+      - type: vertical-stack
+        cards:
+          - type: custom:button-card
+            template: ulm_card_cover
+            entity: cover.curtain_376f
+            variables:
+              ulm_card_cover_enable_controls: true
+              ulm_card_cover_display_left_right: true
+            styles:
+              card:
+                - box-shadow: none
+          - type: custom:button-card
+            template: ulm_card_cover
+            entity: cover.curtain_3061
+            variables:
+              ulm_card_cover_enable_controls: true
+              ulm_card_cover_display_left_right: true
+            styles:
+              card:
+                - box-shadow: none
+      - type: grid
+        columns: 1
+        square: false
+        cards:
+          - type: custom:button-card
+            icon: mdi:fan
+            entity: fan.unassigned_ceiling_fan
+            name: Ceiling Fan
+            label: Bedroom
+            show_label: true
+            show_state: false
+            state_display: 25%
+            tap_action:
+              action: toggle
+            double_tap_action:
+              action: more-info
+            size: 15pt
+            custom_fields:
+              speed: |
+                [[[
+                  var time = states["fan.unassigned_ceiling_fan"].state
+                  let welcome = '';
+                  if (time == 'on'){
+                    welcome = states['fan.unassigned_ceiling_fan'].attributes.percentage + '%'
+                  } else {
+                    welcome = 'Off'
+                  }
+                  return welcome;
+                ]]]
+            styles:
+              grid:
+                - position: relative
+              card:
+                - padding: 18px
+              img_cell:
+                - justify-self: end
+                - width: 30pt
+                - height: 30pt
+                - background: rgb(160,196,233)
+                - margin-top: 1%
+                - border-radius: 100px
+              name:
+                - justify-self: start
+                - font-size: 18px
+                - font-weight: 700
+                - margin-top: '-20%'
+              label:
+                - justify-self: start
+                - font-size: 14px
+                - margin-top: '-5%'
+                - font-weight: 300
+              custom_fields:
+                speed:
+                  - position: absolute
+                  - text-align: right
+                  - left: 65%
+                  - top: 20%
+                  - font-weight: 600
+                  - font-size: 23px
+            state:
+              - value: 'on'
+                styles:
+                  icon:
+                    - animation: rotating 0.7s linear infinite
+                    - color: white
+              - value: 'off'
+                styles:
+                  img_cell:
+                    - background: rgba(75,75,75,0.35)
+                    - opacity: 25%
+          - square: false
+            type: grid
+            cards:
+              - type: custom:button-card
+                template: toggle
+                name: Outlet
+                entity: switch.tp_link_smart_plug_8e87
+              - type: custom:button-card
+                template: toggle
+                name: Sound Machine
+                icon: mdi:power
+                entity: switch.koogeek_p1_6c7bf8_outlet
+              - type: custom:button-card
+                icon: mdi:string-lights
+                name: String Lights
+                entity: switch.koogeek_p1_9109af_outlet
+                show_state: true
+                tap_action:
+                  action: toggle
+                  haptic: medium
+                state:
+                  - value: 'on'
+                    styles:
+                      card:
+                        - background-color: var(--yellow)
+                        - box-shadow: none
+                      icon:
+                        - color: var(--black)
+                      name:
+                        - color: var(--black)
+                      state:
+                        - color: var(--black)
+                        - opacity: '0.5'
+                  - value: 'off'
+                    styles:
+                      card:
+                        - background: var(--contrast2)
+                        - box-shadow: none
+                      icon:
+                        - width: 24px
+                        - color: var(--contrast20)
+                      name:
+                        - color: var(--contrast20)
+                      label:
+                        - color: var(--contrast9)
+                styles:
+                  icon:
+                    - width: 24px
+                  img_cell:
+                    - justify-content: flex-start
+                    - margin-top: '-4px'
+                  name:
+                    - justify-self: start
+                    - font-size: 12px
+                    - font-weight: 700
+                    - margin-bottom: 0px
+                  card:
+                    - height: 84px
+                    - border-radius: 24px
+                    - padding: 12px 0 12px 14px
+                    - box-sizing: border-box
+                    - '--mdc-ripple-press-opacity': 0
+                  state:
+                    - justify-self: start
+                    - font-size: 12px
+              - type: custom:button-card
+                icon: mdi:light-recessed
+                name: Closet Lights
+                entity: light.closet_lights
+                show_state: true
+                tap_action:
+                  action: toggle
+                  haptic: medium
+                state:
+                  - value: 'on'
+                    styles:
+                      card:
+                        - background-color: var(--yellow)
+                        - box-shadow: none
+                      icon:
+                        - color: var(--black)
+                      name:
+                        - color: var(--black)
+                      state:
+                        - color: var(--black)
+                        - opacity: '0.5'
+                  - value: 'off'
+                    styles:
+                      card:
+                        - background: var(--contrast2)
+                        - box-shadow: none
+                      icon:
+                        - width: 24px
+                        - color: var(--contrast20)
+                      name:
+                        - color: var(--contrast20)
+                      label:
+                        - color: var(--contrast9)
+                styles:
+                  icon:
+                    - width: 24px
+                  img_cell:
+                    - justify-content: flex-start
+                    - margin-top: '-4px'
+                  name:
+                    - justify-self: start
+                    - font-size: 12px
+                    - font-weight: 700
+                    - margin-bottom: 0px
+                  card:
+                    - height: 84px
+                    - border-radius: 24px
+                    - padding: 12px 0 12px 14px
+                    - box-sizing: border-box
+                    - '--mdc-ripple-press-opacity': 0
+                  state:
+                    - justify-self: start
+                    - font-size: 12px
+              - type: custom:button-card
+                name: Filament Bulb
+                entity: light.hanging_filament_light
+                show_state: true
+                tap_action:
+                  action: toggle
+                  haptic: medium
+                double_tap_action:
+                  action: more-info
+                state:
+                  - value: 'on'
+                    styles:
+                      card:
+                        - background-color: var(--yellow)
+                        - box-shadow: none
+                      icon:
+                        - color: var(--black)
+                      name:
+                        - color: var(--black)
+                      state:
+                        - color: var(--black)
+                        - opacity: '0.5'
+                  - value: 'off'
+                    styles:
+                      card:
+                        - background: var(--contrast2)
+                        - box-shadow: none
+                      icon:
+                        - width: 24px
+                        - color: var(--contrast20)
+                      name:
+                        - color: var(--contrast20)
+                      label:
+                        - color: var(--contrast9)
+                styles:
+                  icon:
+                    - width: 24px
+                  img_cell:
+                    - justify-content: flex-start
+                    - margin-top: '-4px'
+                  name:
+                    - justify-self: start
+                    - font-size: 12px
+                    - font-weight: 700
+                    - margin-bottom: 0px
+                  card:
+                    - height: 84px
+                    - border-radius: 24px
+                    - padding: 12px 0 12px 14px
+                    - box-sizing: border-box
+                    - '--mdc-ripple-press-opacity': 0
+                  state:
+                    - justify-self: start
+                    - font-size: 12px
+              - type: custom:button-card
+                template: toggle
+                name: Watch Charger
+                icon: mdi:lightning-bolt-circle
+                entity: switch.tp_link_smart_plug_feea
+            columns: 2
+      - type: custom:button-card
+        entity: weather.forecast_home
+        show_name: false
+        show_icon: false
+        custom_fields:
+          temp: |
+            [[[
+              return states['weather.forecast_home'].attributes.temperature + '°'
+            ]]]
+          cond: |
+            [[[
+              var time = states["weather.forecast_home"].state
+              let welcome = '';
+              if (time == 'clear-night'){
+                welcome = 'Clear';
+              } else if (time == 'clear'){
+                welcome = Sunny;
+              } else if (time == 'partlycloudy'){
+                welcome = 'Partly Cloudy';
+              } else {
+                welcome = states["weather.forecast_home"].state;
+              }
+              return welcome;
+            ]]]
+          icon: |
+            [[[
+              var weather = states["weather.forecast_home"].state
+              let welcome = '';
+              if (states['weather.forecast_home'].state == 'partlycloudy' && states['sun.sun'].state == 'below_horizon') {
+                return '<img src = "/local/weather_icons/partly-cloudy-night.svg" width="90" height="90" />'
+              } else {
+                return '<img src = "/local/weather_icons/' + weather + '.svg" width="90" height="90" />'
+              }
+              return welcome;
+            ]]] 
+          icon2: |
+            [[[
+              var time = states["weather.forecast_home"].attributes.temperature
+              let welcome = '';
+              if (time <= 28){
+                welcome = '<ha-icon icon="mdi:snowflake" style="width:26px; height: 26px;"> </ha-icon>'
+              } else {
+                welcome = '<ha-icon icon="mdi:water-outline" style="width:26px; height: 26px;"> </ha-icon>'
+              }
+              return welcome;
+            ]]]
+          prec: |
+            [[[
+              return states["weather.forecast_home"].attributes.humidity + '%'
+            ]]]
+          icon3: |
+            [[[
+              return '<ha-icon icon="mdi:weather-windy" style="width:26px; height: 26px;"> </ha-icon>'
+            ]]]
+          wind: |
+            [[[
+              let myNumber = states["weather.forecast_home"].attributes.wind_speed;
+              let roundedNumber = `${Math.round(myNumber)} mph`;
+              return roundedNumber;
+            ]]]
+        styles:
+          grid:
+            - grid-template-rows: 33% auto% 33%
+            - grid-template-columns: 50% 25% 25%
+            - grid-template-areas: |
+                "icon icon2 icon3"
+                "temp prec wind"
+                "cond . ."
+          card:
+            - height: 120pt
+          custom_fields:
+            icon:
+              - margin-top: 3%
+            temp:
+              - font-size: 22pt
+              - font-weight: 700
+            cond:
+              - font-size: 10pt
+              - margin-bottom: 3%
+              - margin-left: '-3%'
+              - text-transform: capitalize
+            icon2:
+              - margin-left: '-35%'
+              - margin-top: 50%
+            prec:
+              - margin-left: '-34%'
+            icon3:
+              - margin-left: '-35%'
+              - margin-top: 50%
+            wind:
+              - margin-left: '-34%'
+      - type: vertical-stack
+        cards:
+          - square: false
+            type: grid
+            cards:
+              - type: custom:button-card
+                entity: input_datetime.wake_up_time
+                show_state: true
+                show_name: false
+                styles:
+                  grid:
+                    - grid-template-areas: '"s eenheid" "l l"'
+                    - grid-template-columns: min-content min-content
+                  state:
+                    - font-size: 32px
+                    - color: var(--contrast20)
+                    - margin-top: '-35%'
+                  card:
+                    - height: 80px
+                    - border-radius: 24px
+                    - padding: 30px 0 6px 16px
+                    - box-sizing: border-box
+                    - background: var(--contrast2)
+                    - box-shadow: none
+                  label:
+                    - justify-self: start
+                    - font-size: 12px
+                    - color: var(--contrast20)
+                    - margin-top: '-30px'
+                  custom_fields:
+                    eenheid:
+                      - font-size: 12px
+                      - color: var(--contrast9)
+                      - margin-bottom: 6px
+                      - padding-left: 2px
+                label: Wake Up Time
+                show_label: true
+                tap_action:
+                  action: more-info
+                state:
+                  - value: null
+              - type: custom:button-card
+                entity: input_number.fan_auto_trigger_temperature
+                show_state: false
+                show_name: true
+                name: |
+                  [[[
+                    let myNumber = states["input_number.fan_auto_trigger_temperature"].state;
+                    let roundedNumber = `${Math.round(myNumber)}°F`;
+                    return roundedNumber;
+                  ]]]
+                styles:
+                  grid:
+                    - grid-template-areas: '"n eenheid" "l l"'
+                    - grid-template-columns: min-content min-content
+                  name:
+                    - font-size: 32px
+                    - color: var(--contrast20)
+                    - margin-top: '-62%'
+                  card:
+                    - height: 80px
+                    - border-radius: 24px
+                    - padding: 30px 0 6px 16px
+                    - box-sizing: border-box
+                    - background: var(--contrast2)
+                    - box-shadow: none
+                  label:
+                    - justify-self: start
+                    - font-size: 12px
+                    - color: var(--contrast20)
+                    - margin-top: '-30px'
+                label: Fan Trigger Temp
+                show_label: true
+                tap_action:
+                  action: none
+              - type: custom:button-card
+                entity: switch.virtual_switch_1
+                show_state: true
+                show_name: false
+                styles:
+                  grid:
+                    - grid-template-areas: '"s eenheid" "l l"'
+                    - grid-template-columns: min-content min-content
+                  state:
+                    - font-size: 32px
+                    - color: var(--contrast20)
+                    - margin-top: '-45%'
+                  card:
+                    - height: 80px
+                    - border-radius: 24px
+                    - padding: 30px 0 6px 16px
+                    - box-sizing: border-box
+                    - background: var(--contrast2)
+                    - box-shadow: none
+                  label:
+                    - justify-self: start
+                    - font-size: 12px
+                    - color: var(--contrast20)
+                    - margin-top: '-30px'
+                label: Motion Automations
+                show_label: true
+                tap_action:
+                  action: toggle
+                state:
+                  - value: 'on'
+                    state_display: Active
+                    styles:
+                      state:
+                        - color: green
+                  - value: 'off'
+                    state_display: Disabled
+                    styles:
+                      state:
+                        - opacity: 50%
+                        - margin-top: '-30%'
+                        - margin-left: '-3%'
+                confirmation:
+                  text: |
+                    [[[
+                      var time = states["switch.virtual_switch_1"].state
+                      let welcome = '';
+                      if (time == 'on'){
+                        welcome = 'This will disable all motion sensor automations.'
+                      } else {
+                        welcome = 'All motion sensor automations will be enabled.'
+                      }
+                      return welcome;
+                    ]]]
+              - type: custom:button-card
+                entity: timer.watch_charger_timer
+                show_state: true
+                show_name: false
+                styles:
+                  grid:
+                    - grid-template-areas: '"s s" "l l"'
+                    - grid-template-columns: min-content min-content
+                  state:
+                    - font-size: 32px
+                    - justify-self: start
+                    - color: var(--contrast20)
+                    - margin-top: '-35%'
+                    - color: orange
+                  card:
+                    - height: 80px
+                    - border-radius: 24px
+                    - padding: 30px 0 6px 16px
+                    - box-sizing: border-box
+                    - background: var(--contrast2)
+                    - box-shadow: none
+                  label:
+                    - justify-self: start
+                    - font-size: 12px
+                    - color: var(--contrast20)
+                    - margin-top: '-30px'
+                state:
+                  - value: idle
+                    styles:
+                      state:
+                        - color: null
+                        - opacity: 50%
+                label: Watch Charger Timer
+                show_label: true
+                tap_action:
+                  action: more-info
+            columns: 2
+          - type: custom:button-card
+            name: Looks like you've reached the end 👀
+            styles:
+              card:
+                - background: none
+                - '--mdc-ripple-press-opacity': 0
+              name:
+                - opacity: 60%
+                - font-size: 16px
+            style: |
+              ha-card {
+                 box-shadow: none
+              }
+  - title: Security
+    path: security
+    type: custom:vertical-layout
+    layout:
+      width: 265
+      padding: 15px
+    icon: mdi:shield-lock
+    theme: Rounded
+    cards:
+      - type: custom:button-card
+        name: Security
+        styles:
+          card:
+            - background: none
+            - padding: 16px 0
+            - '--mdc-ripple-press-opacity': 0
+          name:
+            - font-size: 32px
+            - color: var(--contrast20)
+            - margin-top: '-5%'
+      - type: vertical-stack
+        cards:
+          - type: custom:vertical-stack-in-card
+            cards:
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    entity: alarm_control_panel.alarmo
+                    show_name: false
+                    tap_action:
+                      action: more-info
+                    styles:
+                      card:
+                        - width: 150px
+                        - padding: 25px
+                        - overflow: visible
+                        - '--mdc-ripple-press-opacity': 0
+                      img_cell:
+                        - justify-self: start
+                        - width: 200px
+                      icon:
+                        - margin-left: 3%
+                    state:
+                      - value: disarmed
+                        icon: mdi:shield-off-outline
+                      - value: arming
+                        icon: mdi:shield-outline
+                        styles:
+                          icon:
+                            - color: orange
+                            - animation: blink 1.5s ease infinite
+                      - value: armed_home
+                        icon: mdi:shield-home-outline
+                        styles:
+                          icon:
+                            - color: green
+                      - value: armed_away
+                        icon: mdi:shield-lock-outline
+                        styles:
+                          icon:
+                            - color: red
+                      - value: armed_night
+                        icon: mdi:shield-moon-outline
+                        styles:
+                          icon:
+                            - color: indigo
+                      - value: armed_vacation
+                        icon: mdi:shield-airplane-outlineairplane
+                        styles:
+                          icon:
+                            - color: red
+                      - value: pending
+                        icon: mdi:shield-alert-outline
+                        styles:
+                          icon:
+                            - color: orange
+                            - animation: blink 1.5s ease infinite
+                      - value: triggered
+                        icon: mdi:shield-alert
+                        styles:
+                          icon:
+                            - color: red
+                            - animation: blink 1s linear infinite
+                  - type: custom:button-card
+                    entity: alarm_control_panel.alarmo
+                    show_icon: false
+                    show_label: true
+                    label: Tap for more info
+                    styles:
+                      card:
+                        - width: 200px
+                        - overflow: visible
+                        - '--mdc-ripple-press-opacity': 0
+                      name:
+                        - margin-left: '-20%'
+                        - margin-top: 10%
+                        - font-size: 28px
+                      label:
+                        - margin-left: '-20%'
+                        - margin-top: 6%
+                        - opacity: 70%
+                    state:
+                      - value: disarmed
+                        name: Disarmed
+                      - value: arming
+                        name: Arming
+                      - value: armed_home
+                        name: Armed Home
+                      - value: armed_away
+                        name: Armed Away
+                      - value: armed_night
+                        name: Armed Night
+                      - value: armed_vacation
+                        name: Armed Vacation
+                      - value: pending
+                        name: Pending
+                        styles:
+                          name:
+                            - color: orange
+                            - animation: blink 1.5s ease infinite
+                      - value: triggered
+                        name: Triggered
+                        styles:
+                          name:
+                            - color: red
+                            - animation: blink 1s linear infinite
+      - type: history-graph
+        entities:
+          - entity: binary_sensor.bedroom_motion_sensor_motion
+        logarithmic_scale: false
+        title: Motion • Last 60 mins
+        hours_to_show: 1
+        fit_y_data: false
+      - type: vertical-stack
+        cards:
+          - square: false
+            type: grid
+            title: Cameras
+            cards:
+              - type: custom:button-card
+                template: blue_no_state
+                icon: mdi:video
+                show_name: false
+                show_label: false
+                styles:
+                  card:
+                    - border-radius: 20px
+                    - padding: 12px
+                  img_cell:
+                    - border-radius: 50%
+                    - place-self: center
+                    - width: 42px
+                    - height: 42px
+                  grid:
+                    - grid-template-areas: '''i item1'' ''i item1'' ''item2 item2'''
+                    - grid-template-columns: min-content auto
+                    - grid-template-rows: min-content min-content min-content
+                    - row-gap: 12px
+                custom_fields:
+                  item1:
+                    card:
+                      type: custom:button-card
+                      show_name: true
+                      show_label: true
+                      show_icon: true
+                      name: Put a camera here
+                      label: Idle
+                      styles:
+                        card:
+                          - box-shadow: none
+                          - padding: '0'
+                        name:
+                          - align-self: end
+                          - justify-self: start
+                          - font-weight: bold
+                          - font-size: 14px
+                          - margin-left: 12px
+                          - filter: opacity(100%)
+                        label:
+                          - justify-self: start
+                          - align-self: start
+                          - font-weight: bolder
+                          - font-size: 12px
+                          - filter: opacity(40%)
+                          - margin-left: 12px
+                        grid:
+                          - grid-template-areas: '''n'' ''l'''
+                          - grid-template-columns: auto
+                          - grid-template-rows: min-content min-content
+                  item2:
+                    card:
+                      type: picture-entity
+                      camera_image: camera.some_camera
+                      camera_view: auto
+                      entity: camera.some_camera
+                      show_name: false
+                      show_state: false
+                tap_action:
+                  action: more-info
+              - type: horizontal-stack
+                cards:
+                  - type: custom:button-card
+                    template: blue_no_state
+                    icon: mdi:video
+                    show_name: false
+                    show_label: false
+                    styles:
+                      card:
+                        - border-radius: 20px
+                        - padding: 12px
+                      img_cell:
+                        - border-radius: 50%
+                        - place-self: center
+                        - width: 42px
+                        - height: 42px
+                      grid:
+                        - grid-template-areas: '''i item1'' ''i item1'' ''item2 item2'''
+                        - grid-template-columns: min-content auto
+                        - grid-template-rows: min-content min-content min-content
+                        - row-gap: 12px
+                    custom_fields:
+                      item1:
+                        card:
+                          type: custom:button-card
+                          show_name: true
+                          show_label: true
+                          show_icon: true
+                          name: Put another camera here
+                          label: Idle
+                          styles:
+                            card:
+                              - box-shadow: none
+                              - padding: '0'
+                            name:
+                              - align-self: end
+                              - justify-self: start
+                              - font-weight: bold
+                              - font-size: 14px
+                              - margin-left: 12px
+                              - filter: opacity(100%)
+                            label:
+                              - justify-self: start
+                              - align-self: start
+                              - font-weight: bolder
+                              - font-size: 12px
+                              - filter: opacity(40%)
+                              - margin-left: 12px
+                            grid:
+                              - grid-template-areas: '''n'' ''l'''
+                              - grid-template-columns: auto
+                              - grid-template-rows: min-content min-content
+                      item2:
+                        card:
+                          type: picture-entity
+                          camera_image: camera.wall_tablet_camera
+                          camera_view: auto
+                          entity: camera.wall_tablet_camera
+                          show_name: false
+                          show_state: false
+                    tap_action:
+                      action: more-info
+                  - type: custom:button-card
+                    template: blue_no_state
+                    icon: mdi:video
+                    show_name: false
+                    show_label: false
+                    styles:
+                      card:
+                        - border-radius: 20px
+                        - padding: 12px
+                      img_cell:
+                        - border-radius: 50%
+                        - place-self: center
+                        - width: 42px
+                        - height: 42px
+                      grid:
+                        - grid-template-areas: '''i item1'' ''i item1'' ''item2 item2'''
+                        - grid-template-columns: min-content auto
+                        - grid-template-rows: min-content min-content min-content
+                        - row-gap: 12px
+                    custom_fields:
+                      item1:
+                        card:
+                          type: custom:button-card
+                          show_name: true
+                          show_label: true
+                          show_icon: true
+                          name: Put a third camera here
+                          label: Idle
+                          styles:
+                            card:
+                              - box-shadow: none
+                              - padding: '0'
+                            name:
+                              - align-self: end
+                              - justify-self: start
+                              - font-weight: bold
+                              - font-size: 14px
+                              - margin-left: 12px
+                              - filter: opacity(100%)
+                            label:
+                              - justify-self: start
+                              - align-self: start
+                              - font-weight: bolder
+                              - font-size: 12px
+                              - filter: opacity(40%)
+                              - margin-left: 12px
+                            grid:
+                              - grid-template-areas: '''n'' ''l'''
+                              - grid-template-columns: auto
+                              - grid-template-rows: min-content min-content
+                      item2:
+                        card:
+                          type: picture-entity
+                          camera_image: camera.some_camera
+                          camera_view: auto
+                          entity: camera.some_camera
+                          show_name: false
+                          show_state: false
+                    tap_action:
+                      action: more-info
+            columns: 1
+          - square: false
+            type: grid
+            columns: 2
+            title: Door Sensors
+            cards:
+              - type: custom:mushroom-entity-card
+                entity: binary_sensor.virtual_binary_sensor_2
+                name: Bedroom Door
+              - type: custom:mushroom-entity-card
+                entity: binary_sensor.virtual_binary_sensor_1
+                name: Closet Doors
+                icon: mdi:door-sliding
+  - title: Media Controls
+    path: media-controls
+    type: custom:vertical-layout
+    layout:
+      width: 265
+      padding: 15px
+    icon: phu:homepod-mini
+    theme: Rounded
+    badges: []
+    cards:
+      - type: custom:button-card
+        name: HomePod
+        custom_fields:
+          badge:
+            card:
+              type: custom:button-card
+              name: Volume
+              label: |
+                [[[
+                  let number = states['media_player.bedroom_homepod'].attributes.volume_level;
+                  let result = `${number * 100}`;
+                  return result + '%';
+                ]]]
+              show_label: true
+              show_icon: false
+              entity: vacuum.roborock_s5_max
+              tap_action:
+                action: none
+              styles:
+                grid:
+                  - grid-template-areas: '"n gutter l"'
+                  - grid-template-columns: min-content 5px min-content
+                  - grid-template-rows: min-content
+                card:
+                  - display: |
+                      [[[
+                        var time = states["media_player.bedroom_homepod"].state
+                        let welcome = '';
+                        if (time != 'off'){
+                          welcome = 'block'
+                        } else {
+                          welcome = 'none'
+                        }
+                        return welcome;
+                      ]]]
+                  - padding: 6px 10px
+                  - font-size: 12px
+                  - line-height: 18px
+                  - font-weight: 500
+                  - background: var(--contrast20)
+                name:
+                  - color: var(--contrast1)
+                label:
+                  - color: var(--contrast12)
+        styles:
+          grid:
+            - grid-template-areas: '"n" "badge"'
+          card:
+            - background: none
+            - padding: 16px 0
+            - '--mdc-ripple-press-opacity': 0
+          name:
+            - font-size: 32px
+            - color: var(--contrast20)
+            - margin-top: '-5%'
+          custom_fields:
+            badge:
+              - margin: 16px auto 0 auto
+              - '--mdc-ripple-press-opacity': 0.5
+      - type: custom:button-card
+        entity: media_player.bedroom_homepod
+        size: 150pt
+        show_entity_picture: true
+        name: >
+          [[[ return
+          states['media_player.bedroom_homepod'].attributes.media_title ]]]
+        show_state: true
+        state_display: >
+          [[[ return
+          states['media_player.bedroom_homepod'].attributes.media_artist ]]]
+        show_label: true
+        label: >-
+          [[[ return
+          states['media_player.bedroom_homepod'].attributes.media_album_name ]]]
+        styles:
+          card:
+            - background: none
+            - box-shadow: none
+          name:
+            - margin-top: 6%
+            - font-size: 24pt
+            - font-weight: 700
+          state:
+            - margin-top: 3%
+            - font-size: 14pt
+          label:
+            - margin-top: 3%
+            - font-size: 14pt
+          icon:
+            - border-radius: 100%
+          img_cell:
+            - height: 250px
+        state:
+          - value: playing
+            styles:
+              img_cell:
+                - animation: rotating 7s linear infinite
+              icon:
+                - box-shadow: 0px 0px 14px 14px rgb(255,255,255,0.2)
+          - value: paused
+            styles:
+              img_cell:
+                - filter: grayscale(100%)
+          - value: 'off'
+            name: Powered Off
+            state_display: Tap to power on
+            icon: mdi:power
+          - value: idle
+            icon: mdi:music-off
+            state_display: Not Playing
+            styles:
+              icon:
+                - color: null
+                - opacity: 50%
+        tap_action:
+          action: call-service
+          service: remote.turn_on
+          data: {}
+          target:
+            entity_id: remote.bedroom_homepod
+      - type: conditional
+        conditions:
+          - condition: state
+            entity: media_player.bedroom_homepod
+            state_not: 'off'
+        card:
+          square: false
+          type: grid
+          cards:
+            - type: custom:button-card
+              icon: mdi:skip-previous
+              name: Previous track
+              tap_action:
+                action: call-service
+                haptic: medium
+                service: media_player.media_previous_track
+                target:
+                  entity_id:
+                    - media_player.bedroom_homepod
+                data: {}
+              styles:
+                icon:
+                  - width: 24px
+                img_cell:
+                  - justify-content: flex-start
+                  - margin-top: 0px
+                name:
+                  - justify-self: start
+                  - font-size: 14px
+                  - margin-top: 0px
+                  - color: var(--contrast20)
+                card:
+                  - height: 84px
+                  - border-radius: 24px
+                  - padding: 8px 0px 16px 20px
+                  - background-color: var(--contrast2)
+                grid:
+                  - grid-template-areas: '"i" "n"'
+            - type: custom:button-card
+              icon: mdi:skip-next
+              name: Next track
+              tap_action:
+                action: call-service
+                haptic: medium
+                service: media_player.media_next_track
+                target:
+                  entity_id:
+                    - media_player.bedroom_homepod
+                data: {}
+              styles:
+                icon:
+                  - width: 24px
+                img_cell:
+                  - justify-content: flex-start
+                  - margin-top: 0px
+                name:
+                  - justify-self: start
+                  - font-size: 14px
+                  - margin-top: 0px
+                  - color: var(--contrast20)
+                card:
+                  - height: 84px
+                  - border-radius: 24px
+                  - padding: 8px 0px 16px 20px
+                  - background-color: var(--contrast2)
+                grid:
+                  - grid-template-areas: '"i" "n"'
+            - type: custom:button-card
+              icon: mdi:play
+              entity: media_player.bedroom_homepod
+              name: Play
+              tap_action:
+                action: call-service
+                haptic: medium
+                service: media_player.media_play_pause
+                target:
+                  entity_id: media_player.bedroom_homepod
+                data: {}
+              styles:
+                icon:
+                  - width: 24px
+                  - margin-left: '-2%'
+                  - color: null
+                img_cell:
+                  - justify-content: flex-start
+                  - margin-top: 0px
+                name:
+                  - justify-self: start
+                  - font-size: 14px
+                  - margin-top: 0px
+                card:
+                  - height: 184px
+                  - border-radius: 24px
+                  - padding: 108px 0px 16px 20px
+                grid:
+                  - grid-template-areas: '"i" "n"'
+              state:
+                - value: playing
+                  name: Pause
+                  icon: mdi:pause
+                  styles:
+                    card:
+                      - background: rgb(101,136,255)
+                    icon:
+                      - color: white
+                    name:
+                      - color: white
+            - type: grid
+              columns: 1
+              square: false
+              cards:
+                - type: custom:button-card
+                  icon: mdi:volume-plus
+                  name: Volume up
+                  tap_action:
+                    action: call-service
+                    haptic: medium
+                    service: media_player.volume_up
+                    service_data:
+                      entity_id: media_player.bedroom_homepod
+                  styles:
+                    icon:
+                      - width: 24px
+                    img_cell:
+                      - justify-content: flex-start
+                      - margin-top: 0px
+                    name:
+                      - justify-self: start
+                      - font-size: 14px
+                      - margin-top: 0px
+                      - color: var(--contrast20)
+                    card:
+                      - height: 84px
+                      - border-radius: 24px
+                      - padding: 8px 0px 16px 20px
+                      - background-color: var(--contrast2)
+                    grid:
+                      - grid-template-areas: '"i" "n"'
+                - type: custom:button-card
+                  icon: mdi:volume-minus
+                  name: Volume down
+                  tap_action:
+                    action: call-service
+                    haptic: medium
+                    service: media_player.volume_down
+                    service_data:
+                      entity_id: media_player.bedroom_homepod
+                  styles:
+                    icon:
+                      - width: 24px
+                      - color: var(--contrast20)
+                    img_cell:
+                      - justify-content: flex-start
+                      - margin-top: 0px
+                    name:
+                      - justify-self: start
+                      - font-size: 14px
+                      - margin-top: 0px
+                      - color: var(--contrast20)
+                    card:
+                      - height: 84px
+                      - border-radius: 24px
+                      - padding: 8px 0px 16px 20px
+                      - background-color: var(--contrast2)
+                    grid:
+                      - grid-template-areas: '"i" "n"'
+            - type: custom:button-card
+              icon: mdi:stop
+              name: Stop
+              tap_action:
+                action: call-service
+                haptic: medium
+                service: media_player.media_stop
+                target:
+                  entity_id: media_player.bedroom_homepod
+                data: {}
+              styles:
+                icon:
+                  - width: 24px
+                img_cell:
+                  - justify-content: flex-start
+                  - margin-top: 0px
+                name:
+                  - justify-self: start
+                  - font-size: 14px
+                  - margin-top: 0px
+                  - color: var(--contrast20)
+                card:
+                  - height: 84px
+                  - border-radius: 24px
+                  - padding: 8px 0px 16px 20px
+                  - background-color: var(--contrast2)
+                grid:
+                  - grid-template-areas: '"i" "n"'
+            - type: custom:button-card
+              icon: mdi:power
+              name: Power Off
+              tap_action:
+                action: call-service
+                haptic: medium
+                service: remote.turn_off
+                target:
+                  entity_id: remote.bedroom_homepod
+                data: {}
+              styles:
+                icon:
+                  - width: 24px
+                img_cell:
+                  - justify-content: flex-start
+                  - margin-top: 0px
+                name:
+                  - justify-self: start
+                  - font-size: 14px
+                  - margin-top: 0px
+                  - color: var(--contrast20)
+                card:
+                  - height: 84px
+                  - border-radius: 24px
+                  - padding: 8px 0px 16px 20px
+                  - background-color: var(--contrast2)
+                grid:
+                  - grid-template-areas: '"i" "n"'
+          columns: 2
+      - type: custom:button-card
+        name: Playlists & Radio Stations
+        show_icon: false
+        styles:
+          card:
+            - background: none
+            - border-radius: 24px
+            - color: var(--contrast20)
+            - margin-top: 8px
+            - padding: 18px 0px
+            - font-size: 16px
+            - border: 2px solid var(--contrast5)
+        tap_action:
+          action: more-info
+          haptic: medium
+  - title: Status
+    path: status
+    type: custom:vertical-layout
+    layout:
+      width: 265
+      padding: 15px
+    icon: mdi:server
+    theme: Rounded
+    cards:
+      - type: custom:button-card
+        name: System Status
+        custom_fields:
+          badge:
+            card:
+              type: custom:button-card
+              name: Options
+              label: →
+              show_label: true
+              show_icon: false
+              tap_action:
+                action: none
+              styles:
+                grid:
+                  - grid-template-areas: '"n gutter l"'
+                  - grid-template-columns: min-content 5px min-content
+                  - grid-template-rows: min-content
+                card:
+                  - padding: 6px 10px
+                  - font-size: 12px
+                  - line-height: 18px
+                  - font-weight: 500
+                  - background: var(--contrast20)
+                name:
+                  - color: var(--contrast1)
+                label:
+                  - color: var(--contrast12)
+        styles:
+          grid:
+            - grid-template-areas: '"n" "badge"'
+          card:
+            - background: none
+            - padding: 16px 0
+            - '--mdc-ripple-press-opacity': 0
+          name:
+            - font-size: 32px
+            - color: var(--contrast20)
+            - margin-top: '-5%'
+          custom_fields:
+            badge:
+              - margin: 16px auto 0 auto
+              - '--mdc-ripple-press-opacity': 0.5
+        hold_action:
+          action: navigate
+          navigation_path: /mobile/another-useless-page
+      - square: false
+        type: grid
+        columns: 2
+        cards:
+          - type: custom:vertical-stack-in-card
+            cards:
+              - type: custom:button-card
+                template: entity
+                entity: sensor.processor_use
+                name: CPU Usage
+                styles:
+                  card:
+                    - height: 100px
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.processor_use
+                show:
+                  name: false
+                  icon: false
+                  state: false
+                line_width: 3
+                hours_to_show: 2
+                points_per_hour: 10
+                line_color: rgb(0,200,0)
+                animate: true
+                card_mod:
+                  style: |
+                    ha-card {
+                      box-shadow: none;
+                      background: none;
+                    }
+          - type: custom:vertical-stack-in-card
+            cards:
+              - type: custom:button-card
+                template: entity
+                entity: sensor.processor_temperature
+                name: Temperature
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.processor_temperature
+                show:
+                  name: false
+                  icon: false
+                  state: false
+                line_width: 3
+                hours_to_show: 2
+                points_per_hour: 10
+                line_color: rgb(0,125,255)
+                animate: true
+                card_mod:
+                  style: |
+                    ha-card {
+                      box-shadow: none;
+                      background: none;
+                    }
+          - type: custom:vertical-stack-in-card
+            cards:
+              - type: custom:button-card
+                template: entity
+                entity: sensor.memory_use
+                state_display: |
+                  [[[
+                    return states['sensor.memory_use'].state + ' MB'
+                  ]]]
+                name: Memory Usage
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.memory_use_percent
+                show:
+                  name: false
+                  icon: false
+                  state: false
+                line_width: 3
+                hours_to_show: 2
+                points_per_hour: 10
+                line_color: rgb(0,200,0)
+                animate: true
+                card_mod:
+                  style: |
+                    ha-card {
+                      box-shadow: none;
+                      background: none;
+                    }
+          - type: custom:vertical-stack-in-card
+            cards:
+              - type: custom:button-card
+                template: entity
+                entity: sensor.memory_use
+                state_display: |
+                  [[[
+                    return states['sensor.disk_use'].state + ' GB'
+                  ]]]
+                name: Storage Used
+                icon: mdi:harddisk
+              - type: custom:mini-graph-card
+                entities:
+                  - entity: sensor.disk_use_percent_config
+                    color: rgb(244,210,88)
+                show:
+                  name: false
+                  icon: false
+                  state: false
+                  graph: bar
+                hours_to_show: 2
+                points_per_hour: 5
+                lower_bound: 1
+                upper_bound: 32
+                animate: true
+                card_mod:
+                  style: |
+                    ha-card {
+                      box-shadow: none;
+                      background: none;
+                    }
+      - type: entities
+        entities:
+          - entity: sensor.ipv4_address_eth0
+            name: Current IP Address
+            secondary_info: none
+          - entity: binary_sensor.backups_stale
+            name: Cloud Backups
+          - entity: sensor.packets_in_eth0
+            name: Packets In
+          - entity: sensor.packets_out_eth0
+            name: Packets Out
+            secondary_info: none
+          - entity: sensor.last_boot
+            name: Last Boot
+      - type: vertical-stack
+        title: System Options
+        cards:
+          - type: custom:button-card
+            name: Restart Home Assistant
+            show_icon: false
+            styles:
+              card:
+                - background: none
+                - border-radius: 24px
+                - color: var(--contrast20)
+                - margin-top: 8px
+                - padding: 18px 0px
+                - font-size: 16px
+                - border: 2px solid var(--contrast5)
+            tap_action:
+              action: null
+          - type: custom:button-card
+            name: Restart System
+            show_icon: false
+            styles:
+              card:
+                - background: none
+                - border-radius: 24px
+                - color: var(--contrast20)
+                - margin-top: 8px
+                - padding: 18px 0px
+                - font-size: 16px
+                - border: 2px solid var(--contrast5)
+            tap_action:
+              action: null
+          - type: custom:button-card
+            name: Power Off System
+            show_icon: false
+            styles:
+              card:
+                - background: none
+                - border-radius: 24px
+                - color: var(--contrast20)
+                - margin-top: 8px
+                - padding: 18px 0px
+                - font-size: 16px
+                - border: 2px solid var(--red-tint)
+            tap_action:
+              action: null
+      - type: custom:button-card
+        name: |
+          [[[
+            return "HA Core v" + states['update.home_assistant_core_update'].attributes.installed_version + ", Supervisor v" + states['update.home_assistant_supervisor_update'].attributes.installed_version;
+          ]]]
+        styles:
+          card:
+            - background: none
+            - '--mdc-ripple-press-opacity': 0
+          name:
+            - opacity: 60%
+            - font-size: 16px
+        style: |
+          ha-card {
+             box-shadow: none
+          }
+  - title: Configuration
+    path: config
+    cards:
+      - type: custom:button-card
+        name: Configuration
+        styles:
+          card:
+            - background: none
+            - padding: 16px 0
+            - '--mdc-ripple-press-opacity': 0
+          name:
+            - font-size: 32px
+            - color: var(--contrast20)
+            - margin-top: '-5%'
+      - type: vertical-stack
+        title: "# Each add-on exposes an update entity that turns on when there's a new version available. Replace the below entities in the conditional cards with the entities exposed by your add-ons. You can delete this title when finished."
+        NOTE: make sure you change the entities inside of the templates as well
+        cards:
+          - type: custom:vertical-stack-in-card
+            title: Updates
+            cards:
+              - type: conditional
+                conditions:
+                  - entity: update.home_assistant_core_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-template-card
+                  primary: Update Available
+                  secondary: >-
+                    Home Assistant Core {{
+                    state_attr('update.home_assistant_core_update',
+                    'latest_version') }}
+                  icon: mdi:arrow-up-bold-circle-outline
+                  entity: update.home_assistant_core_update
+                  icon_color: blue
+                  tap_action:
+                    action: more-info
+                  hold_action:
+                    action: none
+                  double_tap_action:
+                    action: none
+              - type: conditional
+                conditions:
+                  - entity: update.home_assistant_operating_system_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-template-card
+                  primary: Update Available
+                  secondary: >-
+                    Home Assistant OS {{
+                    state_attr('update.home_assistant_operating_system_update',
+                    'latest_version') }}
+                  icon: mdi:arrow-up-bold-circle-outline
+                  entity: update.home_assistant_operating_system_update
+                  icon_color: orange
+                  tap_action:
+                    action: more-info
+                  hold_action:
+                    action: none
+                  double_tap_action:
+                    action: none
+              - type: conditional
+                conditions:
+                  - entity: update.home_assistant_supervisor_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-template-card
+                  primary: Update Available
+                  secondary: >-
+                    Home Assistant Supervisor {{
+                    state_attr('update.home_assistant_supervisor_update',
+                    'latest_version') }}
+                  icon: mdi:arrow-up-bold-circle-outline
+                  entity: update.home_assistant_supervisor_update
+                  icon_color: red
+                  tap_action:
+                    action: more-info
+                  hold_action:
+                    action: none
+                  double_tap_action:
+                    action: none
+              - type: conditional
+                conditions:
+                  - entity: sensor.hacs
+                    state_not: '0'
+                card:
+                  type: custom:mushroom-template-card
+                  primary: HACS
+                  secondary: |-
+                    {% if states('sensor.hacs') == '0' %} 
+                      No updates available
+                    {% elif states('sensor.hacs') == '1' %}
+                      1 update available
+                    {% elif states('sensor.hacs') >= '2' %}
+                      {{ states('sensor.hacs') }} updates available
+                    {% endif %}
+                  icon: hacs:hacs
+                  icon_color: cyan
+                  hold_action:
+                    action: none
+                  double_tap_action:
+                    action: none
+                  tap_action:
+                    action: navigate
+                    navigation_path: /hacs
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: update.duck_dns_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-update-card
+                  entity: update.duck_dns_update
+                  name: Duck DNS
+                  icon_type: entity-picture
+                  tap_action:
+                    action: more-info
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: update.file_editor_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-update-card
+                  entity: update.file_editor_update
+                  name: File Editor
+                  icon_type: entity-picture
+                  tap_action:
+                    action: more-info
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: update.home_assistant_google_drive_backup_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-update-card
+                  entity: update.home_assistant_google_drive_backup_update
+                  name: Home Assistant Google Drive Backup
+                  icon_type: entity-picture
+                  tap_action:
+                    action: more-info
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: update.mosquitto_broker_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-update-card
+                  entity: update.mosquitto_broker_update
+                  name: Mosquitto Broker
+                  icon_type: entity-picture
+                  tap_action:
+                    action: more-info
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: update.samba_share_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-update-card
+                  entity: update.samba_share_update
+                  name: Samba Share
+                  icon_type: entity-picture
+                  tap_action:
+                    action: more-info
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: update.terminal_ssh_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-update-card
+                  entity: update.terminal_ssh_update
+                  name: Terminal & SSH
+                  icon_type: entity-picture
+                  tap_action:
+                    action: more-info
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: update.fusion_update
+                    state: 'on'
+                card:
+                  type: custom:mushroom-update-card
+                  entity: update.fusion_update
+                  name: HA Fusion
+                  icon_type: entity-picture
+                  tap_action:
+                    action: more-info
+              - type: conditional
+                conditions:
+                  - condition: state
+                    entity: update.home_assistant_core_update
+                    state: 'off'
+                  - condition: state
+                    entity: update.home_assistant_operating_system_update
+                    state: 'off'
+                  - condition: state
+                    entity: update.home_assistant_supervisor_update
+                    state: 'off'
+                  - condition: state
+                    entity: sensor.hacs
+                    state: '0'
+                  - condition: state
+                    entity: update.duck_dns_update
+                    state: 'off'
+                  - condition: state
+                    entity: update.file_editor_update
+                    state: 'off'
+                  - condition: state
+                    entity: update.home_assistant_google_drive_backup_update
+                    state: 'off'
+                  - condition: state
+                    entity: update.mosquitto_broker_update
+                    state: 'off'
+                  - condition: state
+                    entity: update.samba_share_update
+                    state: 'off'
+                  - condition: state
+                    entity: update.terminal_ssh_update
+                    state: 'off'
+                card:
+                  type: custom:mushroom-template-card
+                  icon: mdi:check
+                  icon_color: green
+                  primary: No updates available
+                  secondary: Your system is up-to-date
+          - type: custom:button-card
+            name: You can put entities/button cards here to control input booleans on your system. 
+    icon: mdi:cog
+    theme: Rounded
+    layout:
+      width: 265
+      padding: 15px
+    type: custom:vertical-layout
+title: "You don't need a title for a full-screen dashboard, my friend. But do consider starring my repo if you like this dashboard"
