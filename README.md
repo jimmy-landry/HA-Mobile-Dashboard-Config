@@ -1,11 +1,7 @@
 # Home Assistant Mobile Dashboard
 A mobile Home Assistant dashboard inspired by LE0N's Rounded theme
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/187080a2-5615-4c68-b3f9-d3718bc00c34">
-  <source media="(prefers-color-scheme: light)" srcset="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/da6df125-bd12-41f8-af0c-0246c3891d67">
-  <img alt="Shows a black logo in light color mode and a white one in dark color mode." src="https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/187080a2-5615-4c68-b3f9-d3718bc00c34">
-</picture>
+![Untitled 9 001](https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/df1e2fde-a861-43a0-87f9-e7ce795c37a4)
 
 > No, I'm not creative enough to give this a name. Yes, I know I could just name it "Rounded dashboard based off LE0N's dashboard," but that's a bit of a mouthful. Personally, I think Home Assistant Mobile Dashboard has a nice ring to it, don't you?
 
