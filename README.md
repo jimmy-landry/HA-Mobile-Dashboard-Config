@@ -1,6 +1,19 @@
 # Home Assistant Mobile Dashboard
 A mobile Home Assistant dashboard inspired by LE0N's Rounded theme
 
+## ⚠️ UPDATE 8/27/2024: 
+I am aware of a breaking change that has caused the title of the graph cards to appear below the graph itself.
+
+Like this ⬇
+
+<img width="386" alt="Screenshot 2024-08-27 at 9 33 11 PM" src="https://github.com/user-attachments/assets/b4560295-c588-41b2-9d20-8fd4bb9edf7e">
+
+I don't expect to be able to fix this myself, as I'm not that great with CSS and it sounds like that's the root of the issue. If anyone manages to find a solution, open a pull request or post it in [this community thread](https://community.home-assistant.io/t/rounded-dashboard-guide/543043/555), we'd all greatly appreciate it.
+
+So if you're seeing this on your dashboard and don't know how to fix it, you're not the only one 😉
+
+---
+
 ![Untitled 9 001](https://github.com/jimmy-landry/HA-Mobile-Dashboard-Config/assets/121106900/df1e2fde-a861-43a0-87f9-e7ce795c37a4)
 
 > No, I'm not creative enough to give this a name. Yes, I know I could just name it "Rounded dashboard based off LE0N's dashboard," but that's a bit of a mouthful. Personally, I think Home Assistant Mobile Dashboard has a nice ring to it, don't you?
