@@ -359,7 +359,7 @@ Rounded:
         order: 1;
       }
 
-      .graph hui-graph-header-footer {
+      ha-card.graph.type-entity div.footer {
         order: 3;
       }
 
